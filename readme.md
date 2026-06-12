@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="img/logograndecf.png" alt="Capa do Projeto IFEED" width="35%">
+  <img src="img/logograndesf.png" alt="Capa do Projeto IFEED" width="35%">
 </p>
 
 <h1 align="center"> IFEED - Sistema de Feedback Alimentar</h1>
