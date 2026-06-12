@@ -1,8 +1,8 @@
 <p align="center">
-  <img src="img/logomenorcf.png" alt="Capa do Projeto IFEED" width="45%">
+  <img src="img/logograndecf.png" alt="Capa do Projeto IFEED" width="35%">
 </p>
 
-<h1 align="center">📌 IFEED - Sistema de Feedback Alimentar</h1>
+<h1 align="center"> IFEED - Sistema de Feedback Alimentar</h1>
 
 <p align="center">
   <img src="https://img.shields.io/badge/Status-Em%20Desenvolvimento-orange?style=for-the-badge" alt="Status">
