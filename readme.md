@@ -4,17 +4,10 @@
 
 <h1 align="center"> IFEED - Sistema de Feedback Alimentar</h1>
 
-<p align="center">
-  <img src="https://img.shields.io/badge/Status-Em%20Desenvolvimento-orange?style=for-the-badge" alt="Status">
-  <img src="https://img.shields.io/badge/Plataforma-Web-blue?style=for-the-badge" alt="Plataforma">
-</p>
-
 ---
 
 ### Sobre o Projeto
-O **IFEED** é um sistema digital focado no gerenciamento e feedback da alimentação escolar. Ele foi idealizado para aproximar os usuários do refeitório institucional, permitindo que alunos e administradores avaliem as refeições, visualizem cardápios e acompanhem relatórios detalhados sobre a aceitação da merenda.
-
-O grande diferencial é transformar opiniões em dados estruturados para melhorar continuamente a qualidade do serviço de alimentação oferecido.
+O **IFEED** é um sistema digital focado no gerenciamento e feedback da alimentação escolar do Campus Canguaretama. Ele foi idealizado para aproximar os usuários do refeitório institucional, permitindo que alunos e administradores avaliem as refeições, visualizem cardápios e acompanhem relatórios detalhados sobre a aceitação da merenda. O grande diferencial é transformar opiniões em dados estruturados para melhorar continuamente a qualidade do serviço de alimentação oferecido...
 
 ---
 
