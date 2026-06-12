@@ -1,4 +1,5 @@
+<p align="center">
+  <img src="img/logomenorcf.png" alt="Capa do Projeto IFEED" width="100%">
+</p>
 Projeto IFEED
-
-FRANCISLAYNE DE MOURA, MARIA LARA, VITÓRIA BENIZ, YURI SOUZA
-
+FRANCISLAYNE NOBRE, MARIA LARA, VITÓRIA BENIZ, YURI SOUZA
