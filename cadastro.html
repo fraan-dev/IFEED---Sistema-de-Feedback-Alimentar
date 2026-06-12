@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cadastro - IFEED</title>
+    <link rel="icon" type="image/png" href="img/favicon/favicon-96x96.png" sizes="96x96" />
+    <link rel="icon" type="image/svg+xml" href="img/favicon/favicon.svg" />
+    <link rel="shortcut icon" href="img/favicon/favicon.ico" />
+    <link rel="apple-touch-icon" sizes="180x180" href="img/favicon/apple-touch-icon.png" />
+    <link rel="manifest" href="img/favicon/site.webmanifest" />
+    <link rel="stylesheet" href="assets/static/estilos/index.css">
+    <link rel="stylesheet" href="assets/static/estilos/cadastro.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet">
+</head>
+
+<body>
+
+    <header class="header">
+
+        <div class="brand-bar">
+            <div class="brand-left">
+                <div class="brand-text">
+                    <h1 class="brand-title">IFEED</h1>
+                    <p class="brand-subtitle">Sistema de feedback alimentar</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="main-header">
+            <nav class="menu" aria-label="Navegação principal">
+                <button type="button" class="menu-toggle" aria-expanded="false" aria-controls="main-navigation">Menu</button>
+                <ul id="main-navigation">
+                    <li><a href="index.html#inicio">Início</a></li>
+                    <li><a href="index.html#informacoes">Informações</a></li>
+                    <li><a href="index.html#avisos">Avisos</a></li>
+                    <li><a href="index.html#cardapio">Cardápio</a></li>
+                    <li><a href="login.html">Login</a></li>
+                    <li><a href="cadastro.html">Cadastro</a></li>
+                    <li><a href="login.html" class="btn-login">Entrar</a></li>
+                </ul>
+            </nav>
+        </div>
+
+    </header>
+
+    <main>
+
+    <section class="cadastro-section">
+
+        <div class="cadastro-left">
+            <img src="img/logograndesf.png" alt="IFEED">
+
+            <h2>Crie sua conta no IFEED</h2>
+
+            <p>
+                Cadastre-se para acessar o sistema de feedback alimentar,
+                acompanhar o cardápio e participar das avaliações estudantis.
+            </p>
+
+            <div class="cadastro-benefits">
+
+                <div class="benefit-card">
+                    <span>🍽️</span>
+                    <p>Acesso ao cardápio</p>
+                </div>
+
+                <div class="benefit-card">
+                    <span>⭐</span>
+                    <p>Envie avaliações</p>
+                </div>
+
+                <div class="benefit-card">
+                    <span>📢</span>
+                    <p>Receba avisos do campus</p>
+                </div>
+
+            </div>
+        </div>
+
+
+        <div class="cadastro-container">
+
+            <div class="cadastro-box">
+
+                <h2>Cadastro de Usuário</h2>
+                <p>Preencha os dados abaixo para criar sua conta.</p>
+                <div class="form-message" role="status" aria-live="polite"></div>
+
+                <form id="cadastroForm" action="#" method="post" autocomplete="on">
+
+                    <div class="input-group">
+                        <label for="nome">Nome Completo</label>
+                        <input type="text" id="nome" name="nome" placeholder="Digite seu nome completo" required autocomplete="name">
+                    </div>
+
+                    <div class="input-row">
+
+                        <div class="input-group">
+                            <label for="matricula">Matrícula</label>
+                            <input type="text" id="matricula" name="matricula" inputmode="numeric" pattern="\d*" maxlength="14" placeholder="20260000000000" required autocomplete="off">
+                        </div>
+
+                        <div class="input-group">
+                            <label for="curso">Curso</label>
+                            <input type="text" id="curso" name="curso" placeholder="Ex: TSI" required autocomplete="organization">
+                        </div>
+
+                    </div>
+
+                    <div class="input-row">
+
+                        <div class="input-group">
+                            <label for="turma">Turma</label>
+                            <input type="text" id="turma" name="turma" placeholder="Ex: 3V" required autocomplete="off">
+                        </div>
+
+                        <div class="input-group">
+                            <label for="email">E-mail Institucional</label>
+                            <input type="email" id="email" name="email" placeholder="seuemail@ifrn.edu.br" required autocomplete="email">
+                        </div>
+
+                    </div>
+
+                    <div class="input-row">
+
+                        <div class="input-group">
+                            <label for="senha">Senha</label>
+                            <input type="password" id="senha" name="senha" placeholder="Digite sua senha" required autocomplete="new-password">
+                        </div>
+
+                        <div class="input-group">
+                            <label for="confirmarSenha">Confirmar Senha</label>
+                            <input type="password" id="confirmarSenha" name="confirmarSenha" placeholder="Confirme sua senha" required autocomplete="new-password">
+                        </div>
+
+                    </div>
+
+                    <fieldset class="user-type">
+                        <legend>Tipo de usuário</legend>
+
+                        <label class="radio-label">
+                            <input type="radio" name="tipoUsuario" value="aluno" checked>
+                            Aluno
+                        </label>
+
+                        <label class="radio-label">
+                            <input type="radio" name="tipoUsuario" value="administrador">
+                            Administrador
+                        </label>
+
+                    </fieldset>
+
+                    <button type="submit" class="cadastro-button">
+                        Criar Conta
+                    </button>
+
+                </form>
+
+                <div class="cadastro-links">
+                    <a href="login.html">Já possui uma conta? Faça login</a>
+                </div>
+
+            </div>
+
+        </div>
+
+    </section>
+
+    </main>
+
+    <footer class="footer">
+
+        <div class="footer-container">
+
+            <div class="footer-column">
+                <div class="footer-logo">
+                    <img src="img/logomenorsf.png" alt="Logo IFEED">
+
+                    <div>
+                        <h2>IFEED</h2>
+                        <p>Sistema Institucional de Feedback Alimentar</p>
+                    </div>
+                </div>
+
+                <p>
+                    Plataforma desenvolvida para melhorar a experiência alimentar estudantil.
+                </p>
+            </div>
+
+            <div class="footer-column">
+                <h3>Navegação</h3>
+
+                <a href="index.html">Início</a>
+                <a href="login.html">Login</a>
+                <a href="cadastro.html">Cadastro</a>
+            </div>
+
+            <div class="footer-column">
+                <h3>Contato</h3>
+
+                <p>📍 IFRN Campus Canguaretama</p>
+                <p>📧 ifeed@ifrn.edu.br</p>
+            </div>
+
+        </div>
+
+        <div class="footer-bottom">
+            <p>
+                © 2026 IFEED - Sistema Institucional de Feedback Alimentar
+            </p>
+        </div>
+
+    </footer>
+
+
+    <script src="assets/static/scripts/menu-toggle.js"></script>
+    <script src="assets/static/scripts/cadastro.js"></script>
+</body>
+
+</html>

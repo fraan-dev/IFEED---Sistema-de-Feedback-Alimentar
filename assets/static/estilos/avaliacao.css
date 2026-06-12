@@ -1,0 +1,237 @@
+
+:root {
+    --green: #2f9b4a;
+    --green-dark: #257a38;
+    --muted: #f5f7f8;
+    --card: #ffffff;
+    --text: #24303a;
+    --muted-text: #6b7780;
+    --border: rgba(34,62,46,0.04);
+}
+
+/* Base */
+body {
+    font-family: 'Poppins', system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial;
+    color: var(--text);
+    background: linear-gradient(180deg,#f7fbf8 0%,#fbfcfd 100%);
+}
+
+.avaliacao-main {
+    max-width: 980px;
+    margin: 28px auto;
+    padding: 18px;
+}
+
+.back-link {
+    display: inline-block;
+    margin-bottom: 18px;
+    color: var(--muted-text);
+    text-decoration: none;
+    font-weight: 500;
+}
+
+.back-link:hover {
+    color: var(--text);
+}
+
+
+/* Barra de marca (logo + título) */
+.brand-bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 18px;
+    padding: 18px 0;
+    border-bottom: 1px solid rgba(0,0,0,0.04);
+    margin-bottom: 18px;
+}
+
+.brand-left {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+}
+
+.brand-text .brand-title {
+    margin: 0;
+    font-size: 1.15rem;
+    letter-spacing: -0.2px;
+}
+
+.brand-text .brand-subtitle {
+    margin: 2px 0 0;
+    color: var(--muted-text);
+    font-size: 0.9rem;
+}
+
+@media (max-width: 700px) {
+    .brand-bar {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+}
+
+
+/* Banner da refeição */
+.meal-banner {
+    background: linear-gradient(90deg,var(--green) 0%,var(--green-dark) 100%);
+    color: #fff;
+    padding: 20px 22px;
+    border-radius: 10px;
+    margin-bottom: 20px;
+    box-shadow: 0 8px 24px rgba(49,81,35,0.12);
+}
+
+.meal-banner small {
+    display: block;
+    opacity: 0.95;
+    font-size: 0.92rem;
+}
+
+.meal-banner h2 {
+    margin: 6px 0 4px;
+    font-size: 1.35rem;
+}
+
+.meal-banner p {
+    margin: 0;
+    opacity: 0.95;
+    font-size: 0.95rem;
+}
+
+
+/* Formulário */
+.avaliacao-form {
+    background: var(--card);
+    padding: 22px;
+    border-radius: 12px;
+    box-shadow: 0 10px 30px rgba(35,55,40,0.06);
+    border: 1px solid var(--border);
+}
+
+.avaliacao-form fieldset {
+    margin: 12px 0;
+    padding: 0;
+    border: 0;
+}
+
+.avaliacao-form legend {
+    font-weight: 600;
+    color: var(--muted-text);
+    margin-bottom: 8px;
+}
+
+.two-columns {
+    display: flex;
+    gap: 18px;
+}
+
+.two-columns fieldset {
+    flex: 1;
+}
+
+label[for="comentario"] {
+    display: block;
+    margin-top: 12px;
+    font-weight: 600;
+    color: var(--muted-text);
+}
+
+#comentario {
+    width: 100%;
+    min-height: 120px;
+    padding: 12px;
+    border-radius: 10px;
+    border: 1px solid #e6edf0;
+    resize: vertical;
+    font-size: 0.95rem;
+}
+
+
+/* Estrelas */
+.stars {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+}
+
+.star {
+    background: transparent;
+    border: 1px solid transparent;
+    font-size: 1.6rem;
+    cursor: pointer;
+    color: #c6d0d5;
+    transition: color 0.12s, transform 0.08s;
+}
+
+.star:hover {
+    transform: translateY(-2px);
+}
+
+.star.selected {
+    color: #ffd05a;
+    text-shadow: 0 1px 0 rgba(0,0,0,0.08);
+}
+
+.rating-value {
+    margin-left: 8px;
+    color: var(--muted-text);
+    font-size: 0.95rem;
+}
+
+.btn.submit {
+    display: inline-block;
+    background: var(--green);
+    color: #fff;
+    padding: 12px 18px;
+    border-radius: 10px;
+    border: 0;
+    margin-top: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    box-shadow: 0 6px 18px rgba(47,155,74,0.18);
+}
+
+.btn.submit:active {
+    transform: translateY(1px);
+}
+
+
+/* Acessibilidade */
+.star:focus {
+    outline: 3px solid rgba(47,155,74,0.18);
+    outline-offset: 4px;
+}
+
+#comentario:focus {
+    box-shadow: 0 0 0 4px rgba(47,155,74,0.06);
+    border-color: var(--green-dark);
+}
+
+
+/* Responsividade */
+@media (max-width: 880px) {
+    .two-columns {
+        flex-direction: column;
+    }
+
+    .meal-banner h2 {
+        font-size: 1.15rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .avaliacao-main {
+        padding: 12px;
+    }
+
+    .meal-banner {
+        padding: 14px;
+    }
+
+    .btn.submit {
+        width: 100%;
+    }
+}
+
+
