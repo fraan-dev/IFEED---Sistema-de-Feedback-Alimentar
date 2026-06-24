@@ -22,7 +22,7 @@ O **IFEED** é um sistema digital focado no gerenciamento e feedback da alimenta
 
 ---
 
-### ⚡ Funcionalidades Principais
+###  Funcionalidades Principais
 * **Painel do Aluno:** Tela interativa para realizar login, realizar o cadastro e enviar feedbacks diários sobre as refeições.
 * **Painel do Administrador:** Área restrita para análise de relatórios, acompanhamento gráfico de aceitação e gestão do menu.
 * **Sistema de Avaliação:** Interface intuitiva e rápida para classificar os menus servidos.
@@ -30,17 +30,17 @@ O **IFEED** é um sistema digital focado no gerenciamento e feedback da alimenta
 
 ---
 
-### 🛠️ Tecnologias Utilizadas
+###  Tecnologias Utilizadas
 O projeto utiliza um conjunto de tecnologias modernas para a construção da sua interface e funcionamento:
 
-* 🌐 **HTML5** - Estruturação das páginas e componentes visuais de forma modularizada.
-* 🎨 **CSS3** - Estilização personalizada, layouts modernos e responsividade.
-* ⚡ **JavaScript** - Comportamentos dinâmicos, validações de formulário e interatividade.
-* 🐍 **Python / Django Framework** - Gerenciamento de rotas dinâmicas, renderização de templates e lógica de backend.
+*  **HTML5** - Estruturação das páginas e componentes visuais de forma modularizada.
+*  **CSS3** - Estilização personalizada, layouts modernos e responsividade.
+*  **JavaScript** - Comportamentos dinâmicos, validações de formulário e interatividade.
+*  **Python / Django Framework** - Gerenciamento de rotas dinâmicas, renderização de templates e lógica de backend.
 
 ---
 
-### 📂 Estrutura de Arquivos Atual
+###  Estrutura de Arquivos Atual
 A arquitetura base do projeto está organizada utilizando o padrão de arquitetura do Django:
 
 * `templates/` - Centralização de todas as páginas HTML modularizadas (`base.html`, `index.html`, `login.html`, `cadastro.html`, etc).
