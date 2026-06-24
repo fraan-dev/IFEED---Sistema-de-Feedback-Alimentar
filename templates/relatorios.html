@@ -1,0 +1,77 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Relatórios e Estatísticas - IFEED{% endblock %}
+
+{% block extra_css %}
+    <link rel="stylesheet" href="{% static 'estilos/admin.css' %}">
+{% endblock %}
+
+{% block content %}
+<main class="admin-main">
+
+    <h1>Relatórios e Estatísticas</h1>
+    <p class="page-subtitle">Análise completa dos feedbacks</p>
+
+    <div class="charts-grid">
+        <div class="chart-card">
+            <h2>Distribuição de Avaliações</h2>
+            <canvas id="distributionChart"></canvas>
+        </div>
+
+        <div class="chart-card">
+            <h2>Avaliação Média por Categoria</h2>
+            <canvas id="categoryChart"></canvas>
+        </div>
+
+        <div class="chart-card">
+            <h2>Avaliações por Tipo de Refeição</h2>
+            <canvas id="mealChart"></canvas>
+        </div>
+
+        <div class="chart-card">
+            <h2>Evolução Temporal</h2>
+            <canvas id="timelineChart"></canvas>
+        </div>
+    </div>
+
+    <div class="stats-summary">
+        <h2>Resumo Estatístico</h2>
+        <div class="stats-grid">
+            <div class="stat-card">
+                <label>Média Sabor</label>
+                <span class="stat-value" id="stat-sabor">0/5</span>
+            </div>
+            <div class="stat-card">
+                <label>Média Apresentação</label>
+                <span class="stat-value" id="stat-apresentacao">0/5</span>
+            </div>
+            <div class="stat-card">
+                <label>Média Temperatura</label>
+                <span class="stat-value" id="stat-temperatura">0/5</span>
+            </div>
+            <div class="stat-card">
+                <label>Média Quantidade</label>
+                <span class="stat-value" id="stat-quantidade">0/5</span>
+            </div>
+        </div>
+    </div>
+
+</main>
+
+<div id="logout-modal" class="modal" style="display:none">
+    <div class="modal-content">
+        <h2>Sair da Conta</h2>
+        <p>Tem certeza que deseja sair?</p>
+        <div class="modal-actions">
+            <button id="logout-confirm" class="btn-danger">Sair</button>
+            <button id="logout-cancel" class="btn-secondary">Cancelar</button>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="{% static 'scripts/admin.js' %}"></script>
+{% endblock %}

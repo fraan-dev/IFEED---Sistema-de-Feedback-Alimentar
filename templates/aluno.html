@@ -1,0 +1,89 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Painel do Aluno - IFEED{% endblock %}
+
+{% block extra_css %}
+    <link rel="stylesheet" href="{% static 'estilos/aluno.css' %}">
+{% endblock %}
+
+{% block content %}
+<main class="aluno-main">
+
+    <section class="today-meals">
+        <h2>Refeições de Hoje</h2>
+
+        <div class="meals-row">
+            <article class="meal-card">
+                <div class="meal-card-header">
+                    <small>Lanche da Manhã</small>
+                    <h3>Frutas, Biscoito e suco</h3>
+                </div>
+                <p class="meal-desc">Melancia, Melão, Biscoito e suco</p>
+                <div class="meal-footer">
+                    <div class="rating">⭐ 5.0</div>
+                    <button class="btn avaliar">Avaliar Refeição</button>
+                </div>
+            </article>
+
+            <article class="meal-card">
+                <div class="meal-card-header">
+                    <small>Almoço</small>
+                    <h3>Arroz, Feijão, Frango Assado e Salada</h3>
+                </div>
+                <p class="meal-desc">Arroz branco, feijão preto, farofa e frango assado</p>
+                <div class="meal-footer">
+                    <div class="rating">⭐ 4.3</div>
+                    <button class="btn avaliar">Avaliar Refeição</button>
+                </div>
+            </article>
+
+            <article class="meal-card">
+                <div class="meal-card-header">
+                    <small>Lanche da Tarde</small>
+                    <h3>Bolo, Suco e Fruta</h3>
+                </div>
+                <p class="meal-desc">Bolo de ovos, Suco de goiaba e Banana</p>
+                <div class="meal-footer">
+                    <div class="rating">⭐ 4.7</div>
+                    <button class="btn avaliar">Avaliar Refeição</button>
+                </div>
+            </article>
+
+            <article class="meal-card">
+                <div class="meal-card-header">
+                    <small>Janta</small>
+                    <h3>Cuscuz, Arroz, Salada e Carne</h3>
+                </div>
+                <p class="meal-desc">Cuscuz, arroz refogado com cenoura, salada de alface e carne guisada</p>
+                <div class="meal-footer">
+                    <div class="rating">⭐ 4.5</div>
+                    <button class="btn avaliar">Avaliar Refeição</button>
+                </div>
+            </article>
+        </div>
+    </section>
+
+    <section class="recent-reviews">
+        <h2>Minhas Avaliações Recentes</h2>
+        <div id="reviews-container" class="reviews-container">
+            </div>
+    </section>
+
+</main>
+
+<div id="logout-modal" class="modal" style="display:none">
+    <div class="modal-content">
+        <h2>Sair da Conta</h2>
+        <p>Tem certeza que deseja sair?</p>
+        <div class="modal-actions">
+            <button id="logout-confirm" class="btn-danger">Sair</button>
+            <button id="logout-cancel" class="btn-secondary">Cancelar</button>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+    <script src="{% static 'scripts/aluno.js' %}"></script>
+{% endblock %}

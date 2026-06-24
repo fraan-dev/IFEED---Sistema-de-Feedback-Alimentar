@@ -1,0 +1,49 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}IFEED{% endblock %}</title>
+    <link rel="icon" type="image/png" href="{% static 'img/favicon/favicon-96x96.png' %}" sizes="96x96" />
+    <link rel="icon" type="image/svg+xml" href="{% static 'img/favicon/favicon.svg' %}" />
+    <link rel="shortcut icon" href="{% static 'img/favicon/favicon.ico' %}" />
+    <link rel="stylesheet" href="{% static 'assets/static/estilos/index.css' %}">
+    {% block extra_css %}{% endblock %}
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <header class="header">
+        <div class="brand-bar">
+            <div class="brand-left">
+                <div class="brand-text">
+                    <h1 class="brand-title">IFEED</h1>
+                    <p class="brand-subtitle">Sistema de feedback alimentar</p>
+                </div>
+            </div>
+        </div>
+        <div class="main-header">
+            <nav class="menu" aria-label="Navegação principal">
+                <button type="button" class="menu-toggle" aria-expanded="false" aria-controls="main-navigation">Menu</button>
+                <ul id="main-navigation">
+                    <li><a href="index.html#inicio">Início</a></li>
+                    <li><a href="index.html#informacoes">Informações</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    {% block content %}
+    {% endblock %}
+
+    <footer class="footer">
+        <div class="footer-bottom">
+            <p>© 2026 IFEED - Sistema Institucional de Feedback Alimentar</p>
+        </div>
+    </footer>
+    <script src="{% static 'scripts/menu-toggle.js' %}"></script>
+    {% block extra_js %}{% endblock %}
+</body>
+</html>
