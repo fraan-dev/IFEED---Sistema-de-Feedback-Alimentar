@@ -12,14 +12,13 @@ O **IFEED** é um sistema digital focado no gerenciamento e feedback da alimenta
 ---
 
 ### Equipe de Desenvolvimento
-O projeto está sendo desenvolvido por:
 
-| Nome | Função / Foco | GitHub |
-| :--- | :--- | :--- |
-| **Francislayne Nobre** | Desenvolvimento Geral / Frontend | [@fraan-dev](https://github.com/fraan-dev) |
-| **Maria Lara** | Interface de redes & Documentação | |
-| **Vitória Beniz** | Documentação & Backend | |
-| **Yuri Souza** | Estrutura de Dados & Backend | |
+| Nome | GitHub |
+| :--- | :--- |
+| **Francislayne Nobre** | [@fraan-dev](https://github.com/fraan-dev) |
+| **Maria Lara** | | 
+| **Vitória Beniz** | | 
+| **Yuri Souza** | | 
 
 ---
 
