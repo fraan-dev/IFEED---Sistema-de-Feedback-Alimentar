@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="img/logograndesf.png" alt="Capa do Projeto IFEED" width="35%">
+  <img src="static/img/logograndesf.png" alt="Capa do Projeto IFEED" width="35%">
 </p>
 
 <h1 align="center"> IFEED - Sistema de Feedback Alimentar</h1>
@@ -22,7 +22,7 @@ O **IFEED** é um sistema digital focado no gerenciamento e feedback da alimenta
 
 ---
 
-###  Funcionalidades Principais
+### ⚡ Funcionalidades Principais
 * **Painel do Aluno:** Tela interativa para realizar login, realizar o cadastro e enviar feedbacks diários sobre as refeições.
 * **Painel do Administrador:** Área restrita para análise de relatórios, acompanhamento gráfico de aceitação e gestão do menu.
 * **Sistema de Avaliação:** Interface intuitiva e rápida para classificar os menus servidos.
@@ -30,21 +30,22 @@ O **IFEED** é um sistema digital focado no gerenciamento e feedback da alimenta
 
 ---
 
-###  Tecnologias Utilizadas
+### 🛠️ Tecnologias Utilizadas
 O projeto utiliza um conjunto de tecnologias modernas para a construção da sua interface e funcionamento:
 
-* 🌐 **HTML5** - Estruturação das páginas e componentes visuais.
+* 🌐 **HTML5** - Estruturação das páginas e componentes visuais de forma modularizada.
 * 🎨 **CSS3** - Estilização personalizada, layouts modernos e responsividade.
 * ⚡ **JavaScript** - Comportamentos dinâmicos, validações de formulário e interatividade.
-* 🐍 **Python / Django Framework** - Planejado para gerenciamento de rotas, banco de dados seguro e lógica de backend.
+* 🐍 **Python / Django Framework** - Gerenciamento de rotas dinâmicas, renderização de templates e lógica de backend.
 
 ---
 
 ### 📂 Estrutura de Arquivos Atual
-A arquitetura base do projeto está organizada da seguinte forma:
-* `index.html` - Página principal de apresentação.
-* `login.html` & `cadastro.html` - Telas de autenticação dos usuários.
-* `aluno.html` & `avaliacao.html` - Área de interação e feedback do estudante.
-* `feedbacks.html` & `relatorios.html` - Painéis administrativos para visualização de dados.
-* `assets/static/` - Organização dos arquivos de estilo (`css`) e scripts de comportamento (`js`).
-* `img/` - Centralização de logotipos, favicons e elementos visuais do sistema.
+A arquitetura base do projeto está organizada utilizando o padrão de arquitetura do Django:
+
+* `templates/` - Centralização de todas as páginas HTML modularizadas (`base.html`, `index.html`, `login.html`, `cadastro.html`, etc).
+* `static/estilos/` - Arquivos de estilização visual (`css`).
+* `static/scripts/` - Scripts de comportamento e interatividade (`js`).
+* `static/img/` - Centralização de logotipos, favicons e elementos visuais do sistema.
+* `core/` - Aplicativo responsável pelas regras de negócio, controle de rotas (`urls.py`) e visualizações (`views.py`).
+* `ifeed_project/` - Diretório de configuração global do projeto Django.
