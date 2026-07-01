@@ -7,27 +7,25 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{% block title %}IFEED{% endblock %}</title>
     
-    
+    <!-- Favicons -->
     <link rel="icon" type="image/png" href="{% static 'img/favicon/favicon-96x96.png' %}" sizes="96x96" />
     <link rel="icon" type="image/svg+xml" href="{% static 'img/favicon/favicon.svg' %}" />
     <link rel="shortcut icon" href="{% static 'img/favicon/favicon.ico' %}" />
     
-    
+    <!-- CSS Base -->
     <link rel="stylesheet" href="{% static 'estilos/base.css' %}">
     
-    
+    <!-- CSS Extra -->
     {% block extra_css %}{% endblock %}
     
     <!-- Fontes -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
-    
-    
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 </head>
 <body>
-    <!-- ===== HEADER MODERNO ===== -->
+    <!-- HEADER -->
     <header class="header">
         <div class="header-container">
             <!-- Logo -->
@@ -40,7 +38,7 @@
                 </a>
             </div>
 
-            <!-- Navegação Centralizada -->
+            <!-- Navegação -->
             <nav class="nav-menu" aria-label="Navegação principal">
                 <ul class="nav-list">
                     <li class="nav-item">
@@ -70,7 +68,7 @@
                 </ul>
             </nav>
 
-        
+            <!-- Ações -->
             <div class="header-actions">
                 {% if user.is_authenticated %}
                     <div class="user-menu">
@@ -97,14 +95,13 @@
                     </div>
                 {% endif %}
                 
-                
                 <button class="menu-toggle" id="menuToggle" aria-expanded="false">
                     <i class="fas fa-bars"></i>
                 </button>
             </div>
         </div>
 
-        
+        <!-- Mobile Menu -->
         <div class="mobile-menu" id="mobileMenu">
             <ul class="mobile-nav-list">
                 <li><a href="{% url 'index' %}"><i class="fas fa-home"></i> Início</a></li>
@@ -119,13 +116,13 @@
         </div>
     </header>
 
-
+    <!-- CONTEÚDO PRINCIPAL -->
     <main class="main-content">
         {% block content %}
         {% endblock %}
     </main>
 
-    
+    <!-- FOOTER -->
     <footer class="footer">
         <div class="footer-container">
             <div class="footer-grid">
@@ -190,36 +187,6 @@
 
     
     <script src="{% static 'scripts/menu-toggle.js' %}"></script>
-    <script>
-        // Dropdown do usuário
-        document.addEventListener('DOMContentLoaded', function() {
-            const userMenuBtn = document.getElementById('userMenuBtn');
-            const userDropdown = document.getElementById('userDropdown');
-            
-            if (userMenuBtn) {
-                userMenuBtn.addEventListener('click', function(e) {
-                    e.stopPropagation();
-                    userDropdown.classList.toggle('show');
-                });
-                
-                document.addEventListener('click', function() {
-                    userDropdown.classList.remove('show');
-                });
-            }
-            
-            // Mobile menu
-            const menuToggle = document.getElementById('menuToggle');
-            const mobileMenu = document.getElementById('mobileMenu');
-            
-            if (menuToggle) {
-                menuToggle.addEventListener('click', function() {
-                    const isOpen = mobileMenu.classList.toggle('open');
-                    this.setAttribute('aria-expanded', isOpen);
-                    this.innerHTML = isOpen ? '<i class="fas fa-times"></i>' : '<i class="fas fa-bars"></i>';
-                });
-            }
-        });
-    </script>
     {% block extra_js %}{% endblock %}
 </body>
 </html>

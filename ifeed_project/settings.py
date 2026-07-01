@@ -116,14 +116,11 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/6.0/howto/static-files/
 
-
 STATIC_URL = '/static/'
-
 
 STATICFILES_DIRS = [
     BASE_DIR / 'static',
 ]
-
 
 STATIC_ROOT = BASE_DIR / 'staticfiles'
 
@@ -133,3 +130,7 @@ MEDIA_ROOT = BASE_DIR / 'media'
 
 LOGIN_REDIRECT_URL = 'index'
 LOGOUT_REDIRECT_URL = 'login'
+
+
+# ===== CONFIGURAÇÃO DO MODELO DE USUÁRIO PERSONALIZADO =====
+AUTH_USER_MODEL = 'core.Usuario'
