@@ -1,49 +1,225 @@
 {% load static %}
+
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{% block title %}IFEED{% endblock %}</title>
+    
+    
     <link rel="icon" type="image/png" href="{% static 'img/favicon/favicon-96x96.png' %}" sizes="96x96" />
     <link rel="icon" type="image/svg+xml" href="{% static 'img/favicon/favicon.svg' %}" />
     <link rel="shortcut icon" href="{% static 'img/favicon/favicon.ico' %}" />
-    <link rel="stylesheet" href="{% static 'assets/static/estilos/index.css' %}">
+    
+    
+    <link rel="stylesheet" href="{% static 'estilos/base.css' %}">
+    
+    
     {% block extra_css %}{% endblock %}
+    
+    <!-- Fontes -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 </head>
 <body>
+    <!-- ===== HEADER MODERNO ===== -->
     <header class="header">
-        <div class="brand-bar">
-            <div class="brand-left">
-                <div class="brand-text">
-                    <h1 class="brand-title">IFEED</h1>
-                    <p class="brand-subtitle">Sistema de feedback alimentar</p>
-                </div>
+        <div class="header-container">
+            <!-- Logo -->
+            <div class="logo">
+                <a href="{% url 'index' %}">
+                    <div class="logo-text">
+                        <span class="logo-title">IFEED</span>
+                        <span class="logo-subtitle">Sistema de Feedback Alimentar</span>
+                    </div>
+                </a>
             </div>
-        </div>
-        <div class="main-header">
-            <nav class="menu" aria-label="Navegação principal">
-                <button type="button" class="menu-toggle" aria-expanded="false" aria-controls="main-navigation">Menu</button>
-                <ul id="main-navigation">
-                    <li><a href="index.html#inicio">Início</a></li>
-                    <li><a href="index.html#informacoes">Informações</a></li>
+
+            <!-- Navegação Centralizada -->
+            <nav class="nav-menu" aria-label="Navegação principal">
+                <ul class="nav-list">
+                    <li class="nav-item">
+                        <a href="{% url 'index' %}" class="nav-link {% if request.path == '/' %}active{% endif %}">
+                            <i class="fas fa-home"></i>
+                            <span>Início</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="{% url 'index' %}#cardapio" class="nav-link">
+                            <i class="fas fa-utensils"></i>
+                            <span>Cardápio</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="{% url 'index' %}#informacoes" class="nav-link">
+                            <i class="fas fa-info-circle"></i>
+                            <span>Informações</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="{% url 'index' %}#avisos" class="nav-link">
+                            <i class="fas fa-bullhorn"></i>
+                            <span>Avisos</span>
+                        </a>
+                    </li>
                 </ul>
             </nav>
+
+        
+            <div class="header-actions">
+                {% if user.is_authenticated %}
+                    <div class="user-menu">
+                        <button class="user-avatar" id="userMenuBtn">
+                            <i class="fas fa-user-circle"></i>
+                            <span class="user-name">{{ user.username }}</span>
+                            <i class="fas fa-chevron-down"></i>
+                        </button>
+                        <div class="user-dropdown" id="userDropdown">
+                            <a href="{% url 'aluno' %}"><i class="fas fa-tachometer-alt"></i> Painel</a>
+                            <a href="#"><i class="fas fa-user-cog"></i> Perfil</a>
+                            <hr>
+                            <a href="{% url 'logout' %}" class="logout-link"><i class="fas fa-sign-out-alt"></i> Sair</a>
+                        </div>
+                    </div>
+                {% else %}
+                    <div class="auth-buttons">
+                        <a href="{% url 'login' %}" class="btn-login {% if request.path == '/login/' %}active{% endif %}">
+                            <i class="fas fa-sign-in-alt"></i> Entrar
+                        </a>
+                        <a href="{% url 'cadastro' %}" class="btn-register {% if request.path == '/cadastro/' %}active{% endif %}">
+                            <i class="fas fa-user-plus"></i> Cadastrar
+                        </a>
+                    </div>
+                {% endif %}
+                
+                
+                <button class="menu-toggle" id="menuToggle" aria-expanded="false">
+                    <i class="fas fa-bars"></i>
+                </button>
+            </div>
+        </div>
+
+        
+        <div class="mobile-menu" id="mobileMenu">
+            <ul class="mobile-nav-list">
+                <li><a href="{% url 'index' %}"><i class="fas fa-home"></i> Início</a></li>
+                <li><a href="{% url 'index' %}#cardapio"><i class="fas fa-utensils"></i> Cardápio</a></li>
+                <li><a href="{% url 'index' %}#informacoes"><i class="fas fa-info-circle"></i> Informações</a></li>
+                <li><a href="{% url 'index' %}#avisos"><i class="fas fa-bullhorn"></i> Avisos</a></li>
+                {% if not user.is_authenticated %}
+                    <li><a href="{% url 'login' %}"><i class="fas fa-sign-in-alt"></i> Entrar</a></li>
+                    <li><a href="{% url 'cadastro' %}"><i class="fas fa-user-plus"></i> Cadastrar</a></li>
+                {% endif %}
+            </ul>
         </div>
     </header>
 
-    {% block content %}
-    {% endblock %}
 
+    <main class="main-content">
+        {% block content %}
+        {% endblock %}
+    </main>
+
+    
     <footer class="footer">
-        <div class="footer-bottom">
-            <p>© 2026 IFEED - Sistema Institucional de Feedback Alimentar</p>
+        <div class="footer-container">
+            <div class="footer-grid">
+                <div class="footer-column">
+                    <div class="footer-logo">
+                        <img src="{% static 'img/logomenorsf.png' %}" alt="IFEED">
+                        <div>
+                            <h3>IFEED</h3>
+                            <p>Sistema de Feedback Alimentar</p>
+                        </div>
+                    </div>
+                    <p class="footer-description">
+                        Plataforma desenvolvida para aproximar estudantes e gestão alimentar do IFRN.
+                    </p>
+                    <div class="footer-social">
+                        <a href="#"><i class="fab fa-instagram"></i></a>
+                        <a href="#"><i class="fab fa-youtube"></i></a>
+                        <a href="#"><i class="fab fa-whatsapp"></i></a>
+                    </div>
+                </div>
+
+                <div class="footer-column">
+                    <h4>Navegação</h4>
+                    <ul>
+                        <li><a href="{% url 'index' %}">Início</a></li>
+                        <li><a href="{% url 'index' %}#cardapio">Cardápio</a></li>
+                        <li><a href="{% url 'index' %}#informacoes">Informações</a></li>
+                        <li><a href="{% url 'index' %}#avisos">Avisos</a></li>
+                    </ul>
+                </div>
+
+                <div class="footer-column">
+                    <h4>Acesso Rápido</h4>
+                    <ul>
+                        {% if user.is_authenticated %}
+                            <li><a href="{% url 'aluno' %}">Meu Painel</a></li>
+                            <li><a href="#">Perfil</a></li>
+                            <li><a href="{% url 'logout' %}">Sair</a></li>
+                        {% else %}
+                            <li><a href="{% url 'login' %}">Entrar</a></li>
+                            <li><a href="{% url 'cadastro' %}">Cadastrar</a></li>
+                        {% endif %}
+                    </ul>
+                </div>
+
+                <div class="footer-column">
+                    <h4>Contato</h4>
+                    <ul class="contact-list">
+                        <li><i class="fas fa-map-marker-alt"></i> IFRN Campus Canguaretama</li>
+                        <li><i class="fas fa-envelope"></i> ifeed@ifrn.edu.br</li>
+                        <li><i class="fas fa-phone"></i> (84) 99999-9999</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="footer-bottom">
+                <p>© 2026 IFEED - Sistema Institucional de Feedback Alimentar</p>
+                <p class="footer-version">v1.0.0</p>
+            </div>
         </div>
     </footer>
+
+    
     <script src="{% static 'scripts/menu-toggle.js' %}"></script>
+    <script>
+        // Dropdown do usuário
+        document.addEventListener('DOMContentLoaded', function() {
+            const userMenuBtn = document.getElementById('userMenuBtn');
+            const userDropdown = document.getElementById('userDropdown');
+            
+            if (userMenuBtn) {
+                userMenuBtn.addEventListener('click', function(e) {
+                    e.stopPropagation();
+                    userDropdown.classList.toggle('show');
+                });
+                
+                document.addEventListener('click', function() {
+                    userDropdown.classList.remove('show');
+                });
+            }
+            
+            // Mobile menu
+            const menuToggle = document.getElementById('menuToggle');
+            const mobileMenu = document.getElementById('mobileMenu');
+            
+            if (menuToggle) {
+                menuToggle.addEventListener('click', function() {
+                    const isOpen = mobileMenu.classList.toggle('open');
+                    this.setAttribute('aria-expanded', isOpen);
+                    this.innerHTML = isOpen ? '<i class="fas fa-times"></i>' : '<i class="fas fa-bars"></i>';
+                });
+            }
+        });
+    </script>
     {% block extra_js %}{% endblock %}
 </body>
 </html>

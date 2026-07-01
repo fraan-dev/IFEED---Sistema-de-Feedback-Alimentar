@@ -1,4 +1,4 @@
-
+/* static/estilos/base.css */
 
 /* ===== RESET & BASE ===== */
 * {
@@ -23,13 +23,14 @@ body {
 
 /* ===== HEADER ===== */
 .header {
-    background: #2f9b4a;
-    color: white;
+    background: #2f9b4a !important;  /* Força a cor verde */
+    color: white !important;
     padding: 0;
-    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.15);
+    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.25);
     position: sticky;
     top: 0;
     z-index: 1000;
+    border-bottom: 3px solid rgba(255, 255, 255, 0.2);
 }
 
 .header-container {
@@ -48,7 +49,7 @@ body {
     align-items: center;
     gap: 0.8rem;
     text-decoration: none;
-    color: white;
+    color: white !important;
     transition: transform 0.3s ease;
 }
 
@@ -72,14 +73,14 @@ body {
     font-size: 1.8rem;
     font-weight: 800;
     letter-spacing: 2px;
-    color: white;
+    color: white !important;
 }
 
 .logo-subtitle {
     font-size: 0.7rem;
     font-weight: 300;
     letter-spacing: 1px;
-    color: rgba(255, 255, 255, 0.9);
+    color: rgba(255, 255, 255, 0.9) !important;
 }
 
 /* ===== NAVEGAÇÃO CENTRALIZADA ===== */
@@ -105,7 +106,7 @@ body {
     align-items: center;
     gap: 0.5rem;
     padding: 0.6rem 1.2rem;
-    color: rgba(255, 255, 255, 0.9);
+    color: rgba(255, 255, 255, 0.9) !important;
     text-decoration: none;
     font-weight: 500;
     font-size: 0.9rem;
@@ -117,54 +118,18 @@ body {
 .nav-link i {
     font-size: 1rem;
     transition: transform 0.3s ease;
+    color: rgba(255, 255, 255, 0.9) !important;
 }
 
 .nav-link:hover {
-    color: white;
+    color: white !important;
     background: rgba(255, 255, 255, 0.15);
     transform: translateY(-2px);
 }
 
 .nav-link:hover i {
     transform: translateY(-2px);
-}
-
-.nav-link.active {
-    color: white;
-    background: rgba(255, 255, 255, 0.2);
-    box-shadow: 0 0 20px rgba(255, 255, 255, 0.1);
-}
-
-.nav-link.active::after {
-    content: '';
-    position: absolute;
-    bottom: -2px;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 60%;
-    height: 3px;
-    background: white;
-    border-radius: 3px;
-}
-
-/* ===== ESTILO ESPECIAL PARA O BOTÃO "INÍCIO" ===== */
-
-.nav-item:first-child .nav-link {
-    background: rgba(255, 255, 255, 0.15);
-    border: 1px solid rgba(255, 255, 255, 0.2);
-    font-weight: 600;
-}
-
-.nav-item:first-child .nav-link:hover {
-    background: rgba(255, 255, 255, 0.25);
-    transform: translateY(-2px);
-    box-shadow: 0 4px 15px rgba(255, 255, 255, 0.2);
-}
-
-.nav-item:first-child .nav-link.active {
-    background: rgba(255, 255, 255, 0.3);
-    border-color: white;
-    box-shadow: 0 0 30px rgba(255, 255, 255, 0.2);
+    color: white !important;
 }
 
 
@@ -209,7 +174,7 @@ body {
 }
 
 .btn-login {
-    color: white;
+    color: white !important;
     background: rgba(255, 255, 255, 0.15);
     border: 1px solid rgba(255, 255, 255, 0.25);
 }
@@ -218,6 +183,7 @@ body {
     background: rgba(255, 255, 255, 0.25);
     transform: translateY(-2px);
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+    color: white !important;
 }
 
 .btn-login.active {
@@ -225,8 +191,12 @@ body {
     border-color: white;
 }
 
+.btn-login i {
+    color: white !important;
+}
+
 .btn-register {
-    color: #2f9b4a;
+    color: #2f9b4a !important;
     background: white;
     border: none;
 }
@@ -234,10 +204,11 @@ body {
 .btn-register:hover {
     transform: translateY(-2px);
     box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+    color: #2f9b4a !important;
 }
 
-.btn-register.active {
-    box-shadow: 0 0 30px rgba(255, 255, 255, 0.3);
+.btn-register i {
+    color: #2f9b4a !important;
 }
 
 /* Menu Toggle Mobile */
@@ -245,7 +216,7 @@ body {
     display: none;
     background: rgba(255, 255, 255, 0.15);
     border: 1px solid rgba(255, 255, 255, 0.25);
-    color: white;
+    color: white !important;
     padding: 0.5rem 1rem;
     border-radius: 10px;
     cursor: pointer;
@@ -255,13 +226,19 @@ body {
 
 .menu-toggle:hover {
     background: rgba(255, 255, 255, 0.25);
+    color: white !important;
+}
+
+.menu-toggle i {
+    color: white !important;
 }
 
 /* ===== MOBILE MENU ===== */
 .mobile-menu {
     display: none;
-    background: #2f9b4a;
-    padding: 0 2rem 2rem;
+    background: #1a2a3a;
+    padding: 1rem 2rem 2rem;
+    border-top: 3px solid #2f9b4a;
 }
 
 .mobile-menu.open {
@@ -275,41 +252,107 @@ body {
     gap: 0.5rem;
 }
 
+.mobile-nav-list li {
+    border-radius: 12px;
+    transition: all 0.3s ease;
+}
+
 .mobile-nav-list a {
     display: flex;
     align-items: center;
     gap: 1rem;
-    padding: 0.8rem 1rem;
-    color: rgba(255, 255, 255, 0.9);
+    padding: 0.8rem 1.2rem;
+    color: rgba(255, 255, 255, 0.85) !important;
     text-decoration: none;
     border-radius: 12px;
     transition: all 0.3s ease;
     font-weight: 500;
+    font-size: 1rem;
 }
 
 .mobile-nav-list a:hover {
-    background: rgba(255, 255, 255, 0.1);
-    color: white;
+    background: rgba(47, 155, 74, 0.2);
+    color: white !important;
+    padding-left: 1.5rem;
 }
 
 .mobile-nav-list a i {
     width: 24px;
-    color: rgba(255, 255, 255, 0.8);
+    color: #2f9b4a !important;
+    font-size: 1.1rem;
 }
 
-/* 🔥 NOVO: Destaque para o "Início" no mobile */
+/* DESTAQUE PARA O INÍCIO NO MOBILE */
 .mobile-nav-list li:first-child a {
+    background: rgba(47, 155, 74, 0.15);
+    border: 1px solid rgba(47, 155, 74, 0.3);
+    font-weight: 600;
+    color: white !important;
+}
+
+.mobile-nav-list li:first-child a:hover {
+    background: rgba(47, 155, 74, 0.25);
+    border-color: #2f9b4a;
+}
+
+.mobile-nav-list li:first-child a i {
+    color: #2f9b4a !important;
+}
+
+/* SEPARADOR ENTRE LINKS DO MOBILE */
+.mobile-nav-list li:not(:last-child) {
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+/* BOTÕES DE AÇÃO NO MOBILE */
+.mobile-auth-buttons {
+    margin-top: 1.5rem;
+    padding-top: 1.5rem;
+    border-top: 2px solid rgba(255, 255, 255, 0.1);
+    display: flex;
+    flex-direction: column;
+    gap: 0.8rem;
+}
+
+.mobile-auth-buttons .btn-login-mobile,
+.mobile-auth-buttons .btn-register-mobile {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.8rem;
+    padding: 0.8rem;
+    border-radius: 12px;
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 1rem;
+    transition: all 0.3s ease;
+}
+
+.mobile-auth-buttons .btn-login-mobile {
+    color: white !important;
     background: rgba(255, 255, 255, 0.1);
     border: 1px solid rgba(255, 255, 255, 0.15);
 }
 
-.mobile-nav-list li:first-child a:hover {
+.mobile-auth-buttons .btn-login-mobile:hover {
     background: rgba(255, 255, 255, 0.2);
+    color: white !important;
+}
+
+.mobile-auth-buttons .btn-register-mobile {
+    color: #1a2a3a !important;
+    background: white;
+}
+
+.mobile-auth-buttons .btn-register-mobile:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 20px rgba(255, 255, 255, 0.2);
+    color: #1a2a3a !important;
 }
 
 /* ===== FOOTER ===== */
 .footer {
-    background: #1a2a3a;
+    background: #0d1f1a;
     color: rgba(255, 255, 255, 0.8);
     padding: 3rem 2rem 1rem;
     margin-top: auto;
@@ -329,7 +372,7 @@ body {
 }
 
 .footer-column h4 {
-    color: white;
+    color: white !important;
     font-size: 1.1rem;
     font-weight: 600;
     margin-bottom: 1.2rem;
@@ -355,14 +398,14 @@ body {
 }
 
 .footer-column ul a {
-    color: rgba(255, 255, 255, 0.7);
+    color: rgba(255, 255, 255, 0.7) !important;
     text-decoration: none;
     transition: all 0.3s ease;
     font-size: 0.9rem;
 }
 
 .footer-column ul a:hover {
-    color: #2f9b4a;
+    color: #2f9b4a !important;
     padding-left: 5px;
 }
 
@@ -380,7 +423,7 @@ body {
 }
 
 .footer-logo h3 {
-    color: white;
+    color: white !important;
     font-size: 1.4rem;
     font-weight: 700;
 }
@@ -388,6 +431,7 @@ body {
 .footer-logo p {
     font-size: 0.8rem;
     opacity: 0.7;
+    color: rgba(255, 255, 255, 0.7) !important;
 }
 
 .footer-description {
@@ -395,6 +439,7 @@ body {
     line-height: 1.6;
     opacity: 0.8;
     max-width: 350px;
+    color: rgba(255, 255, 255, 0.7) !important;
 }
 
 .footer-social {
@@ -411,15 +456,23 @@ body {
     height: 40px;
     background: rgba(255, 255, 255, 0.05);
     border-radius: 50%;
-    color: rgba(255, 255, 255, 0.7);
+    color: rgba(255, 255, 255, 0.7) !important;
     text-decoration: none;
     transition: all 0.3s ease;
 }
 
 .footer-social a:hover {
     background: #2f9b4a;
-    color: white;
+    color: white !important;
     transform: translateY(-3px);
+}
+
+.footer-social a i {
+    color: rgba(255, 255, 255, 0.7) !important;
+}
+
+.footer-social a:hover i {
+    color: white !important;
 }
 
 .contact-list li {
@@ -428,10 +481,11 @@ body {
     gap: 0.8rem;
     font-size: 0.9rem;
     opacity: 0.8;
+    color: rgba(255, 255, 255, 0.7) !important;
 }
 
 .contact-list li i {
-    color: #2f9b4a;
+    color: #2f9b4a !important;
     width: 20px;
 }
 
@@ -443,11 +497,13 @@ body {
     align-items: center;
     font-size: 0.85rem;
     opacity: 0.7;
+    color: rgba(255, 255, 255, 0.6) !important;
 }
 
 .footer-version {
     font-size: 0.75rem;
     opacity: 0.5;
+    color: rgba(255, 255, 255, 0.5) !important;
 }
 
 /* ===== RESPONSIVO ===== */
@@ -488,12 +544,6 @@ body {
     .logo-title {
         font-size: 1.3rem;
     }
-    
-    /* 🔥 NOVO: Ajuste do "Início" no mobile */
-    .nav-item:first-child .nav-link {
-        background: transparent;
-        border: none;
-    }
 }
 
 @media (max-width: 768px) {
@@ -510,6 +560,15 @@ body {
         flex-direction: column;
         gap: 0.5rem;
         text-align: center;
+    }
+    
+    .mobile-menu {
+        padding: 0.5rem 1rem 1.5rem;
+    }
+    
+    .mobile-nav-list a {
+        padding: 0.6rem 1rem;
+        font-size: 0.9rem;
     }
 }
 
@@ -531,5 +590,14 @@ body {
     .btn-register {
         padding: 0.5rem 0.7rem;
         font-size: 0.8rem;
+    }
+    
+    .mobile-nav-list a {
+        padding: 0.5rem 0.8rem;
+        font-size: 0.85rem;
+    }
+    
+    .mobile-nav-list a i {
+        font-size: 1rem;
     }
 }

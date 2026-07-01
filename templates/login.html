@@ -12,7 +12,7 @@
     <section class="login-section">
 
         <div class="login-left">
-            <img src="{% static 'img/logograndesf.png' %}" alt="IFEED">
+            <img src="{% static 'img/logograndesf.png' %}" alt="IFEED" width="200" height="auto">
 
             <h2>Bem-vindo ao IFEED</h2>
             <p>
@@ -40,11 +40,15 @@
 
         <div class="login-container">
             <div class="login-box">
+                <div class="login-header-icon">
+                    <i class="fas fa-user-graduate"></i>
+                </div>
+                
                 <h2>Entrar no Sistema</h2>
                 <p>Acesse sua conta utilizando seus dados institucionais.</p>
                 <div class="form-message" role="status" aria-live="polite"></div>
 
-                <form action="#" method="post" autocomplete="on">
+                <form action="{% url 'login' %}" method="post" autocomplete="on">
                     {% csrf_token %}
 
                     <div class="input-group">
@@ -77,8 +81,7 @@
                 </form>
 
                 <div class="login-links">
-                    <a href="#">Esqueci minha senha</a>
-                    <a href="/cadastro/">Não possui cadastro? Faça aqui!</a>
+                    <a href="{% url 'cadastro' %}">Não possui cadastro? Faça aqui!</a>
                 </div>
             </div>
         </div>
