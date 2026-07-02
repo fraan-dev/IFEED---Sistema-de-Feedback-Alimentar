@@ -2,7 +2,7 @@
   <img src="static/img/logograndesf.png" alt="Capa do Projeto IFEED" width="35%">
 </p>
 
-<h1 align="center"> IFEED - Sistema de Feedback Alimentar</h1>
+<h1 align="center"> IFEED - UM SISTEMA WEB PARA FEEDBACK DA ALIMENTAÇÃO ESTUDANTIL</h1>
 
 ---
 
