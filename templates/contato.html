@@ -1,0 +1,20 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Contato - IFEED{% endblock %}
+
+{% block extra_css %}
+    <link rel="stylesheet" href="{% static 'estilos/admin.css' %}">
+{% endblock %}
+
+{% block content %}
+<main class="admin-main">
+    <h1>Contato</h1>
+    <p class="page-subtitle">Informações de contato do sistema IFEED.</p>
+    <div class="feedback-card">
+        <p><strong>Local:</strong> IFRN Campus Canguaretama</p>
+        <p><strong>E-mail:</strong> ifeed@ifrn.edu.br</p>
+        <p><strong>Telefone:</strong> (84) 99999-9999</p>
+    </div>
+</main>
+{% endblock %}

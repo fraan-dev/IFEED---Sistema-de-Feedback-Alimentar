@@ -46,16 +46,6 @@
                 <h2>Entrar no Sistema</h2>
                 <p>Acesse sua conta utilizando seus dados institucionais.</p>
                 
-                <div class="form-message-container">
-                    {% if messages %}
-                        {% for message in messages %}
-                            <div class="form-message {% if message.tags %}{{ message.tags }}{% endif %}">
-                                {{ message }}
-                            </div>
-                        {% endfor %}
-                    {% endif %}
-                </div>
-
                 <form action="{% url 'login' %}" method="post" autocomplete="on">
                     {% csrf_token %}
 
@@ -68,20 +58,6 @@
                         <label for="senhaLogin">Senha</label>
                         <input type="password" id="senhaLogin" name="senha" placeholder="Digite sua senha" required autocomplete="current-password">
                     </div>
-
-                    <fieldset class="user-type">
-                        <legend>Entrar como</legend>
-
-                        <label class="radio-label">
-                            <input type="radio" name="tipo" value="aluno" {% if request.POST.tipo == 'aluno' or not request.POST.tipo %}checked{% endif %}>
-                            Aluno
-                        </label>
-
-                        <label class="radio-label">
-                            <input type="radio" name="tipo" value="administrador" {% if request.POST.tipo == 'administrador' %}checked{% endif %}>
-                            Administrador
-                        </label>
-                    </fieldset>
 
                     <button type="submit" class="login-button">
                         <i class="fas fa-sign-in-alt"></i> Entrar

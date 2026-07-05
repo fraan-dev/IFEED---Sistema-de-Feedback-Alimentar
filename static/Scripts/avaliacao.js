@@ -1,146 +1,158 @@
-
-
-document.addEventListener('DOMContentLoaded', function () {
+document.addEventListener('DOMContentLoaded', function() {
     const form = document.getElementById('avaliacao-form');
     if (!form) return;
 
-    const STORAGE_KEY = 'ifeedMealSelecionada';
-    const REVIEWS_KEY = 'ifeedReviews';
+    const ratings = {};
+    const totalCampos = document.querySelectorAll('.stars[data-field]').length;
+    const progressFill = document.querySelector('.progress-fill');
+    const progressText = document.querySelector('.progress-text');
+    const comentario = document.getElementById('comentario');
+    const charCounter = document.querySelector('.char-counter');
+    const starLabels = ['', 'Péssimo', 'Ruim', 'Regular', 'Bom', 'Excelente'];
 
-   
-    function getMealData() {
-        const stored = sessionStorage.getItem(STORAGE_KEY);
-        if (stored) {
-            try {
-                return JSON.parse(stored);
-            } catch (e) {
-                
-            }
-        }
-
-        const params = new URLSearchParams(window.location.search);
-        if (params.has('nome')) {
-            return {
-                tipo: params.get('tipo') || 'Refeição',
-                nome: params.get('nome') || 'Refeição selecionada',
-                desc: params.get('desc') || '',
-            };
-        }
-        return null;
-    }
-
-    const meal = getMealData();
-    if (meal) {
-        const typeEl = document.getElementById('meal-type');
-        const nameEl = document.getElementById('meal-name');
-        const descEl = document.getElementById('meal-desc');
-        if (typeEl) typeEl.textContent = meal.tipo;
-        if (nameEl) nameEl.textContent = meal.nome;
-        if (descEl) descEl.textContent = meal.desc;
-    }
-
-    
-    const backLink = document.getElementById('back-link');
-    if (backLink) {
-        backLink.addEventListener('click', function (e) {
-            e.preventDefault();
-            if (window.history.length > 1) {
-                window.history.back();
-            } else {
-                window.location.href = '/aluno/';
-            }
-        });
-    }
-
-  
-    const ratings = {}; 
-
-    document.querySelectorAll('.stars[data-field]').forEach(function (container) {
+    document.querySelectorAll('.stars[data-field]').forEach(function(container) {
         const field = container.dataset.field;
         ratings[field] = 0;
 
-        container.setAttribute('role', 'radiogroup');
-        container.setAttribute('aria-label', 'Avaliação: ' + field);
+        const labelSpan = document.createElement('span');
+        labelSpan.className = 'star-label';
+        labelSpan.textContent = '';
+        container.appendChild(labelSpan);
 
         for (let i = 1; i <= 5; i++) {
-            const btn = document.createElement('button');
-            btn.type = 'button';
-            btn.className = 'star-btn';
-            btn.dataset.value = i;
-            btn.setAttribute('role', 'radio');
-            btn.setAttribute('aria-checked', 'false');
-            btn.setAttribute('aria-label', i + ' de 5 estrelas');
-            btn.innerHTML = '<i class="fas fa-star"></i>';
+            const star = document.createElement('button');
+            star.type = 'button';
+            star.className = 'star-btn';
+            star.textContent = '★';
+            star.dataset.value = i;
+            star.setAttribute('aria-label', field + ' ' + i + ' estrelas');
 
-            btn.addEventListener('click', function () {
-                setRating(container, field, i);
-            });
-
-            
-            btn.addEventListener('mouseenter', function () {
+            star.addEventListener('click', function(e) {
+                e.stopPropagation();
+                ratings[field] = i;
                 paintStars(container, i);
-            });
-            btn.addEventListener('mouseleave', function () {
-                paintStars(container, ratings[field]);
+                updateStarLabel(container, i);
+                updateProgress();
+                clearError(container);
             });
 
-            container.appendChild(btn);
+            star.addEventListener('mouseenter', function() {
+                const value = parseInt(this.dataset.value);
+                paintStars(container, value);
+                updateStarLabel(container, value);
+            });
+
+            star.addEventListener('mouseleave', function() {
+                paintStars(container, ratings[field]);
+                updateStarLabel(container, ratings[field]);
+            });
+
+            container.appendChild(star);
         }
     });
 
     function paintStars(container, value) {
-        container.querySelectorAll('.star-btn').forEach(function (btn) {
-            const active = Number(btn.dataset.value) <= value;
-            btn.classList.toggle('active', active);
+        container.querySelectorAll('.star-btn').forEach(function(star) {
+            const active = Number(star.dataset.value) <= value;
+            star.classList.toggle('active', active);
         });
     }
 
-    function setRating(container, field, value) {
-        ratings[field] = value;
-        paintStars(container, value);
-        container.querySelectorAll('.star-btn').forEach(function (btn) {
-            btn.setAttribute('aria-checked', Number(btn.dataset.value) === value ? 'true' : 'false');
+    function updateStarLabel(container, value) {
+        const label = container.querySelector('.star-label');
+        if (label) {
+            const text = starLabels[value] || '';
+            label.textContent = text;
+            label.classList.toggle('active-text', text !== '');
+        }
+    }
+
+    function updateProgress() {
+        const avaliados = Object.values(ratings).filter(v => v > 0).length;
+        const percentage = totalCampos > 0 ? (avaliados / totalCampos) * 100 : 0;
+
+        if (progressFill) {
+            progressFill.style.width = Math.min(percentage, 100) + '%';
+        }
+        if (progressText) {
+            progressText.textContent = avaliados + '/' + totalCampos + ' avaliados';
+        }
+    }
+
+    function clearError(container) {
+        const group = container.closest('.rating-group');
+        if (group) {
+            group.classList.remove('error');
+        }
+    }
+
+    function showError(container) {
+        const group = container.closest('.rating-group');
+        if (group) {
+            group.classList.add('error');
+        }
+    }
+
+    if (comentario && charCounter) {
+        comentario.addEventListener('input', function() {
+            const length = this.value.length;
+            charCounter.textContent = length + '/500';
+            charCounter.classList.remove('warning', 'danger');
+            
+            if (length > 480) {
+                charCounter.classList.add('danger');
+            } else if (length > 400) {
+                charCounter.classList.add('warning');
+            }
         });
     }
 
-  
-    form.addEventListener('submit', function (e) {
-        e.preventDefault();
-
-        const missing = Object.keys(ratings).filter(function (field) {
+    form.addEventListener('submit', function(event) {
+        const missing = Object.keys(ratings).filter(function(field) {
             return ratings[field] === 0;
         });
 
+        document.querySelectorAll('.stars[data-field]').forEach(function(container) {
+            const field = container.dataset.field;
+            if (ratings[field] === 0) {
+                showError(container);
+            } else {
+                clearError(container);
+            }
+        });
+
         if (missing.length > 0) {
-            alert('Por favor, avalie todos os itens antes de enviar.');
+            event.preventDefault();
+            
+            const firstMissing = document.querySelector('.stars[data-field="' + missing[0] + '"]');
+            if (firstMissing) {
+                firstMissing.closest('.rating-group').scrollIntoView({
+                    behavior: 'smooth',
+                    block: 'center'
+                });
+            }
+
+            const campoNomes = {
+                'avaliacao_geral': 'Avaliação Geral',
+                'sabor': 'Sabor',
+                'apresentacao': 'Apresentação',
+                'temperatura': 'Temperatura',
+                'quantidade': 'Quantidade'
+            };
+            
+            const nomesFaltando = missing.map(f => campoNomes[f] || f).join(', ');
+            alert('⚠️ Por favor, avalie todos os itens antes de enviar.\n\nFaltam: ' + nomesFaltando);
             return;
         }
 
-        const comentario = document.getElementById('comentario')
-            ? document.getElementById('comentario').value.trim()
-            : '';
-
-        const review = {
-            meal: meal || { tipo: '', nome: 'Refeição', desc: '' },
-            ratings: ratings,
-            comentario: comentario,
-            data: new Date().toISOString(),
-        };
-
-        
-        const existing = JSON.parse(localStorage.getItem(REVIEWS_KEY) || '[]');
-        existing.unshift(review);
-        localStorage.setItem(REVIEWS_KEY, JSON.stringify(existing));
-        sessionStorage.removeItem(STORAGE_KEY);
-
-        const submitBtn = form.querySelector('.submit');
-        if (submitBtn) {
-            submitBtn.disabled = true;
-            submitBtn.textContent = 'Avaliação enviada!';
-        }
-
-        setTimeout(function () {
-            window.location.href = '/aluno/';
-        }, 900);
+        Object.keys(ratings).forEach(function(field) {
+            const input = document.createElement('input');
+            input.type = 'hidden';
+            input.name = field;
+            input.value = ratings[field];
+            form.appendChild(input);
+        });
     });
+
+    updateProgress();
 });

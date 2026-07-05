@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Confirmar Exclusão - IFEED{% endblock %}
+
+{% block extra_css %}
+    <link rel="stylesheet" href="{% static 'estilos/admin.css' %}">
+{% endblock %}
+
+{% block content %}
+<main class="admin-main">
+    <h1>Confirmar Exclusão</h1>
+    <article class="feedback-card">
+        <p>Tem certeza que deseja excluir <strong>{{ objeto }}</strong>?</p>
+        <form method="post">
+            {% csrf_token %}
+            <button type="submit" class="btn-danger">Excluir</button>
+            <a href="{{ voltar_url }}">Cancelar</a>
+        </form>
+    </article>
+</main>
+{% endblock %}

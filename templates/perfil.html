@@ -1,0 +1,24 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Meu Perfil - IFEED{% endblock %}
+
+{% block extra_css %}
+    <link rel="stylesheet" href="{% static 'estilos/aluno.css' %}">
+{% endblock %}
+
+{% block content %}
+<main class="aluno-main">
+    <section class="recent-reviews">
+        <h2>Meu Perfil</h2>
+        <article class="review-card">
+            <p><strong>Nome:</strong> {{ user.nome_completo }}</p>
+            <p><strong>Matrícula:</strong> {{ user.matricula }}</p>
+            <p><strong>E-mail:</strong> {{ user.email }}</p>
+            <p><strong>Curso:</strong> {{ user.curso }}</p>
+            <p><strong>Turma:</strong> {{ user.turma }}</p>
+            <p><strong>Tipo:</strong> {{ user.get_tipo_usuario_display }}</p>
+        </article>
+    </section>
+</main>
+{% endblock %}

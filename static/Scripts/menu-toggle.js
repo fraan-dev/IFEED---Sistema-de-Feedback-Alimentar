@@ -107,3 +107,20 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     }
 });
+document.addEventListener('DOMContentLoaded', function () {
+    const userMenuBtn = document.getElementById('userMenuBtn');
+    const userDropdown = document.getElementById('userDropdown');
+
+    if (userMenuBtn && userDropdown) {
+        userMenuBtn.addEventListener('click', function (event) {
+            event.stopPropagation();
+            userDropdown.classList.toggle('open');
+        });
+
+        document.addEventListener('click', function (event) {
+            if (!userDropdown.contains(event.target) && !userMenuBtn.contains(event.target)) {
+                userDropdown.classList.remove('open');
+            }
+        });
+    }
+});

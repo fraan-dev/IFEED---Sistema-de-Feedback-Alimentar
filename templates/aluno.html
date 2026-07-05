@@ -22,7 +22,7 @@
                 <p class="meal-desc">Melancia, Melão, Biscoito e suco</p>
                 <div class="meal-footer">
                     <div class="rating">⭐ 5.0</div>
-                    <button class="btn avaliar">Avaliar Refeição</button>
+                    <a href="{% url 'avaliacao' %}?refeicao=Lanche%20da%20Manhã" class="btn avaliar">Avaliar Refeição</a>
                 </div>
             </article>
 
@@ -34,7 +34,7 @@
                 <p class="meal-desc">Arroz branco, feijão preto, farofa e frango assado</p>
                 <div class="meal-footer">
                     <div class="rating">⭐ 4.3</div>
-                    <button class="btn avaliar">Avaliar Refeição</button>
+                    <a href="{% url 'avaliacao' %}?refeicao=Almoço" class="btn avaliar">Avaliar Refeição</a>
                 </div>
             </article>
 
@@ -46,7 +46,7 @@
                 <p class="meal-desc">Bolo de ovos, Suco de goiaba e Banana</p>
                 <div class="meal-footer">
                     <div class="rating">⭐ 4.7</div>
-                    <button class="btn avaliar">Avaliar Refeição</button>
+                    <a href="{% url 'avaliacao' %}?refeicao=Lanche%20da%20Tarde" class="btn avaliar">Avaliar Refeição</a>
                 </div>
             </article>
 
@@ -58,7 +58,7 @@
                 <p class="meal-desc">Cuscuz, arroz refogado com cenoura, salada de alface e carne guisada</p>
                 <div class="meal-footer">
                     <div class="rating">⭐ 4.5</div>
-                    <button class="btn avaliar">Avaliar Refeição</button>
+                    <a href="{% url 'avaliacao' %}?refeicao=Jantar" class="btn avaliar">Avaliar Refeição</a>
                 </div>
             </article>
         </div>
@@ -66,24 +66,42 @@
 
     <section class="recent-reviews">
         <h2>Minhas Avaliações Recentes</h2>
-        <div id="reviews-container" class="reviews-container">
+
+        {% if minhas_avaliacoes %}
+            <div class="reviews-container">
+                {% for avaliacao in minhas_avaliacoes %}
+                    <article class="review-card">
+                        <div class="review-card-header">
+                            <div>
+                                <small>{{ avaliacao.data|date:"d/m/Y H:i" }}</small>
+                                <h3>{{ avaliacao.refeicao }}</h3>
+                            </div>
+                        </div>
+
+                        <div class="review-general">
+                            ⭐ <strong>{{ avaliacao.avaliacao_geral }}/5</strong>
+                        </div>
+
+                        <div class="review-details">
+                            <span>Sabor: {{ avaliacao.sabor }}/5</span>
+                            <span>Apresentação: {{ avaliacao.apresentacao }}/5</span>
+                            <span>Temperatura: {{ avaliacao.temperatura }}/5</span>
+                            <span>Quantidade: {{ avaliacao.quantidade }}/5</span>
+                        </div>
+
+                        {% if avaliacao.comentario %}
+                            <p class="review-comment">"{{ avaliacao.comentario }}"</p>
+                        {% endif %}
+                    </article>
+                {% endfor %}
             </div>
+        {% else %}
+            <p class="empty-state">Você ainda não avaliou nenhuma refeição. Que tal começar agora?</p>
+        {% endif %}
     </section>
 
 </main>
-
-<div id="logout-modal" class="modal" style="display:none">
-    <div class="modal-content">
-        <h2>Sair da Conta</h2>
-        <p>Tem certeza que deseja sair?</p>
-        <div class="modal-actions">
-            <button id="logout-confirm" class="btn-danger">Sair</button>
-            <button id="logout-cancel" class="btn-secondary">Cancelar</button>
-        </div>
-    </div>
-</div>
 {% endblock %}
 
 {% block extra_js %}
-    <script src="{% static 'scripts/aluno.js' %}"></script>
 {% endblock %}

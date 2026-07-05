@@ -39,36 +39,30 @@
         <h2>Resumo Estatístico</h2>
         <div class="stats-grid">
             <div class="stat-card">
+                <label>Total de avaliações</label>
+                <span class="stat-value">{{ total_avaliacoes }}</span>
+            </div>
+            <div class="stat-card">
                 <label>Média Sabor</label>
-                <span class="stat-value" id="stat-sabor">0/5</span>
+                <span class="stat-value" id="stat-sabor">{{ medias.sabor|floatformat:1|default:"0" }}/5</span>
             </div>
             <div class="stat-card">
                 <label>Média Apresentação</label>
-                <span class="stat-value" id="stat-apresentacao">0/5</span>
+                <span class="stat-value" id="stat-apresentacao">{{ medias.apresentacao|floatformat:1|default:"0" }}/5</span>
             </div>
             <div class="stat-card">
                 <label>Média Temperatura</label>
-                <span class="stat-value" id="stat-temperatura">0/5</span>
+                <span class="stat-value" id="stat-temperatura">{{ medias.temperatura|floatformat:1|default:"0" }}/5</span>
             </div>
             <div class="stat-card">
                 <label>Média Quantidade</label>
-                <span class="stat-value" id="stat-quantidade">0/5</span>
+                <span class="stat-value" id="stat-quantidade">{{ medias.quantidade|floatformat:1|default:"0" }}/5</span>
             </div>
         </div>
     </div>
 
+    {{ chart_data|json_script:"chart-data" }}
 </main>
-
-<div id="logout-modal" class="modal" style="display:none">
-    <div class="modal-content">
-        <h2>Sair da Conta</h2>
-        <p>Tem certeza que deseja sair?</p>
-        <div class="modal-actions">
-            <button id="logout-confirm" class="btn-danger">Sair</button>
-            <button id="logout-cancel" class="btn-secondary">Cancelar</button>
-        </div>
-    </div>
-</div>
 {% endblock %}
 
 {% block extra_js %}

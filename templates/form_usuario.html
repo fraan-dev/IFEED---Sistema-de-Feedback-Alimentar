@@ -1,0 +1,20 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Usuário - IFEED{% endblock %}
+
+{% block extra_css %}
+    <link rel="stylesheet" href="{% static 'estilos/admin.css' %}">
+{% endblock %}
+
+{% block content %}
+<main class="admin-main">
+    <h1>Editar Usuário</h1>
+    <form method="post" class="feedback-card">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit" class="btn-secondary">Salvar</button>
+        <a href="{% url 'usuario_list' %}">Cancelar</a>
+    </form>
+</main>
+{% endblock %}

@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Gerenciar Cardápios - IFEED{% endblock %}
+
+{% block extra_css %}
+    <link rel="stylesheet" href="{% static 'estilos/admin.css' %}">
+{% endblock %}
+
+{% block content %}
+<main class="admin-main">
+    <h1>Gerenciar Cardápios</h1>
+    <p><a href="{% url 'cardapio_create' %}" class="btn-secondary">Novo cardápio</a></p>
+
+    <div class="feedbacks-container">
+        {% for cardapio in page_obj %}
+            <article class="feedback-card">
+                <h3>{{ cardapio.nome }}</h3>
+                <small>{{ cardapio.data_inicio|date:"d/m/Y" }} a {{ cardapio.data_fim|date:"d/m/Y" }}</small>
+                <p>{{ cardapio.refeicoes.count }} refeições vinculadas</p>
+                <div class="feedback-footer">
+                    <a href="{% url 'cardapio_update' cardapio.id %}">Editar</a>
+                    <a href="{% url 'cardapio_delete' cardapio.id %}">Excluir</a>
+                </div>
+            </article>
+        {% empty %}
+            <p class="empty-state">Nenhum cardápio cadastrado.</p>
+        {% endfor %}
+    </div>
+</main>
+{% endblock %}

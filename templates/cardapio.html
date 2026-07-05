@@ -1,0 +1,53 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Cardápio - IFEED{% endblock %}
+
+{% block extra_css %}
+    <link rel="stylesheet" href="{% static 'estilos/admin.css' %}">
+{% endblock %}
+
+{% block content %}
+<main class="admin-main">
+    <h1>Cardápio</h1>
+    <p class="page-subtitle">Consulte as refeições cadastradas.</p>
+
+    <form method="get" class="filters-section">
+        <div class="search-box">
+            <input type="text" name="q" value="{{ termo }}" placeholder="🔍 Buscar refeição...">
+        </div>
+        <div class="filter-box">
+            <label for="tipo">Tipo</label>
+            <select id="tipo" name="tipo">
+                <option value="">Todos</option>
+                {% for valor, rotulo in tipos_refeicao %}
+                    <option value="{{ valor }}" {% if tipo == valor %}selected{% endif %}>{{ rotulo }}</option>
+                {% endfor %}
+            </select>
+        </div>
+        <button type="submit" class="btn-secondary">Filtrar</button>
+    </form>
+
+    <div class="feedbacks-container">
+        {% for refeicao in page_obj %}
+            <article class="feedback-card">
+                <div class="feedback-header">
+                    <div>
+                        <h3>{{ refeicao.titulo }}</h3>
+                        <small>{{ refeicao.get_tipo_display }} - {{ refeicao.data|date:"d/m/Y" }}</small>
+                    </div>
+                </div>
+                <p class="feedback-comment">{{ refeicao.descricao }}</p>
+                <div class="feedback-footer">
+                    <a href="{% url 'refeicao_detalhes' refeicao.id %}">Ver detalhes</a>
+                    {% if user.is_authenticated %}
+                        <a href="{% url 'avaliar' refeicao.id %}">Avaliar</a>
+                    {% endif %}
+                </div>
+            </article>
+        {% empty %}
+            <p class="empty-state">Nenhuma refeição cadastrada para os filtros selecionados.</p>
+        {% endfor %}
+    </div>
+</main>
+{% endblock %}

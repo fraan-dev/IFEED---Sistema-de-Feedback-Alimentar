@@ -1,0 +1,38 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Gerenciar Usuários - IFEED{% endblock %}
+
+{% block extra_css %}
+    <link rel="stylesheet" href="{% static 'estilos/admin.css' %}">
+{% endblock %}
+
+{% block content %}
+<main class="admin-main">
+    <h1>Gerenciar Usuários</h1>
+    <p class="page-subtitle">Edite permissões e dados de usuários.</p>
+
+    <form method="get" class="filters-section">
+        <div class="search-box">
+            <input type="text" name="q" value="{{ termo }}" placeholder="🔍 Buscar usuário...">
+        </div>
+        <button type="submit" class="btn-secondary">Buscar</button>
+    </form>
+
+    <div class="feedbacks-container">
+        {% for usuario in page_obj %}
+            <article class="feedback-card">
+                <h3>{{ usuario.nome_completo }}</h3>
+                <small>{{ usuario.matricula }} - {{ usuario.email }}</small>
+                <p>{{ usuario.get_tipo_usuario_display }} | {{ usuario.curso }} | {{ usuario.turma }}</p>
+                <div class="feedback-footer">
+                    <a href="{% url 'usuario_update' usuario.matricula %}">Editar</a>
+                    <a href="{% url 'usuario_delete' usuario.matricula %}">Excluir</a>
+                </div>
+            </article>
+        {% empty %}
+            <p class="empty-state">Nenhum usuário encontrado.</p>
+        {% endfor %}
+    </div>
+</main>
+{% endblock %}

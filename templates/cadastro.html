@@ -44,17 +44,6 @@
                 <p>Preencha os dados abaixo para criar sua conta.</p>
                 
             
-                <div class="form-message-container">
-                    {% if messages %}
-                        {% for message in messages %}
-                            <div class="form-message {% if message.tags %}{{ message.tags }}{% endif %}">
-                                {{ message }}
-                            </div>
-                        {% endfor %}
-                    {% endif %}
-                </div>
-
-                
                 <form id="cadastroForm" action="{% url 'cadastro' %}" method="post" autocomplete="on">
                     {% csrf_token %}
 
@@ -98,20 +87,6 @@
                             <input type="password" id="confirmarSenha" name="confirmarSenha" placeholder="Confirme sua senha" required autocomplete="new-password">
                         </div>
                     </div>
-
-                    <fieldset class="user-type">
-                        <legend>Tipo de usuário</legend>
-
-                        <label class="radio-label">
-                            <input type="radio" name="tipoUsuario" value="aluno" {% if request.POST.tipoUsuario == 'aluno' or not request.POST.tipoUsuario %}checked{% endif %}>
-                            Aluno
-                        </label>
-
-                        <label class="radio-label">
-                            <input type="radio" name="tipoUsuario" value="administrador" {% if request.POST.tipoUsuario == 'administrador' %}checked{% endif %}>
-                            Administrador
-                        </label>
-                    </fieldset>
 
                     <button type="submit" class="cadastro-button">
                         <i class="fas fa-user-plus"></i> Criar Conta

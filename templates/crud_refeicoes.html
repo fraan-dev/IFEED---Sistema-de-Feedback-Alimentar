@@ -1,0 +1,39 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Gerenciar Refeições - IFEED{% endblock %}
+
+{% block extra_css %}
+    <link rel="stylesheet" href="{% static 'estilos/admin.css' %}">
+{% endblock %}
+
+{% block content %}
+<main class="admin-main">
+    <h1>Gerenciar Refeições</h1>
+    <p class="page-subtitle">Cadastre, edite e exclua refeições.</p>
+    <p><a href="{% url 'refeicao_create' %}" class="btn-secondary">Nova refeição</a></p>
+
+    <form method="get" class="filters-section">
+        <div class="search-box">
+            <input type="text" name="q" value="{{ termo }}" placeholder="🔍 Buscar refeição...">
+        </div>
+        <button type="submit" class="btn-secondary">Buscar</button>
+    </form>
+
+    <div class="feedbacks-container">
+        {% for refeicao in page_obj %}
+            <article class="feedback-card">
+                <h3>{{ refeicao.titulo }}</h3>
+                <small>{{ refeicao.get_tipo_display }} - {{ refeicao.data|date:"d/m/Y" }}</small>
+                <p>{{ refeicao.descricao }}</p>
+                <div class="feedback-footer">
+                    <a href="{% url 'refeicao_update' refeicao.id %}">Editar</a>
+                    <a href="{% url 'refeicao_delete' refeicao.id %}">Excluir</a>
+                </div>
+            </article>
+        {% empty %}
+            <p class="empty-state">Nenhuma refeição cadastrada.</p>
+        {% endfor %}
+    </div>
+</main>
+{% endblock %}

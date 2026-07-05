@@ -1,266 +1,387 @@
-from django.shortcuts import render, redirect
+from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
-from django.contrib import messages
-from django.contrib.auth import get_user_model
-from .models import Usuario, Avaliacao
-import json
+from django.core.paginator import Paginator
+from django.db.models import Avg, Count, Q
+from django.db.models.functions import TruncDate
+from django.shortcuts import get_object_or_404, redirect, render
+from django.urls import reverse
+from django.utils import timezone
 
-User = get_user_model()
+from .forms import CardapioForm, RefeicaoForm, UsuarioFormEdicao
+from .models import Avaliacao, Cardapio, Refeicao, Usuario
+
+
+def usuario_e_admin(usuario):
+    return (
+        usuario.is_authenticated
+        and (usuario.tipo_usuario == 'ADMIN' or usuario.is_staff or usuario.is_superuser)
+    )
+
+
+def admin_required(view_func):
+    @login_required
+    def wrapper(request, *args, **kwargs):
+        if not usuario_e_admin(request.user):
+            messages.error(request, 'Você não tem permissão para acessar essa página.')
+            return redirect('aluno')
+        return view_func(request, *args, **kwargs)
+
+    return wrapper
 
 
 def index_view(request):
-    return render(request, 'index.html')
+    hoje = timezone.localdate()
+    cardapios = Cardapio.objects.filter(ativo=True, data_fim__gte=hoje).prefetch_related('refeicoes')[:2]
+    return render(request, 'index.html', {'cardapios': cardapios})
 
 
 def login_view(request):
-    if request.user.is_authenticated:
-        if hasattr(request.user, 'tipo_usuario'):
-            if request.user.tipo_usuario == 'ALUNO':
-                return redirect('aluno')
-            elif request.user.tipo_usuario == 'ADMIN':
-                return redirect('relatorios')
-        return redirect('index')
-    
     if request.method == 'POST':
-        login_input = request.POST.get('login')
+        login_input = request.POST.get('login', '').strip()
         senha = request.POST.get('senha')
-        tipo = request.POST.get('tipo')
-        
-        tipo_map = {
-            'aluno': 'ALUNO',
-            'administrador': 'ADMIN'
-        }
-        tipo_modelo = tipo_map.get(tipo, 'ALUNO')
-        
-        user = None
+
         try:
             if '@' in login_input:
-                user = User.objects.get(email=login_input)
+                usuario_encontrado = Usuario.objects.get(email__iexact=login_input)
             else:
-                user = User.objects.get(username=login_input)
-        except User.DoesNotExist:
-            messages.error(request, 'Usuário não encontrado. Verifique sua matrícula ou e-mail.')
+                usuario_encontrado = Usuario.objects.get(matricula=login_input)
+        except Usuario.DoesNotExist:
+            messages.error(request, 'Usuário não encontrado!')
             return render(request, 'login.html')
-        
-        usuario = authenticate(request, username=user.username, password=senha)
-        
+
+        usuario = authenticate(
+            request,
+            username=usuario_encontrado.matricula,
+            password=senha
+        )
+
         if usuario is not None:
-            if usuario.tipo_usuario != tipo_modelo:
-                messages.error(request, f'Tipo de usuário incorreto. Você é {usuario.get_tipo_usuario_display()}.')
-                return render(request, 'login.html')
-            
             login(request, usuario)
-            
-            if usuario.tipo_usuario == 'ADMIN':
+            messages.success(request, f'Bem-vindo(a), {usuario.nome_completo}!')
+
+            if usuario_e_admin(usuario):
                 return redirect('relatorios')
-            else:
-                return redirect('aluno')
-        else:
-            messages.error(request, 'Senha incorreta. Tente novamente.')
-    
+            return redirect('aluno')
+
+        messages.error(request, 'Senha incorreta!')
+
     return render(request, 'login.html')
 
 
 def cadastro_view(request):
     if request.method == 'POST':
-        nome_completo = request.POST.get('nome')
-        matricula = request.POST.get('matricula')
-        curso = request.POST.get('curso')
-        turma = request.POST.get('turma')
-        email = request.POST.get('email')
-        senha = request.POST.get('senha')
-        confirmar_senha = request.POST.get('confirmarSenha')
-        tipo = request.POST.get('tipoUsuario')
-        
-        tipo_map = {
-            'aluno': 'ALUNO',
-            'administrador': 'ADMIN'
-        }
-        tipo_modelo = tipo_map.get(tipo, 'ALUNO')
-        
+        matricula = (request.POST.get('matricula') or '').strip()
+        nome_completo = (request.POST.get('nome') or '').strip()
+        curso = (request.POST.get('curso') or '').strip()
+        turma = (request.POST.get('turma') or '').strip()
+        email = (request.POST.get('email') or '').strip().lower()
+        senha = request.POST.get('senha') or ''
+        confirmar_senha = request.POST.get('confirmarSenha') or ''
+        tipo_usuario = request.POST.get('tipoUsuario', 'aluno')
+
         if senha != confirmar_senha:
             messages.error(request, 'As senhas não coincidem.')
             return render(request, 'cadastro.html')
-        
         if len(senha) < 6:
             messages.error(request, 'A senha deve ter pelo menos 6 caracteres.')
             return render(request, 'cadastro.html')
-        
-        if User.objects.filter(username=matricula).exists():
-            messages.error(request, 'Matrícula já cadastrada. Use outra matrícula.')
+        if Usuario.objects.filter(matricula=matricula).exists():
+            messages.error(request, 'Matrícula já cadastrada!')
             return render(request, 'cadastro.html')
-        
-        if User.objects.filter(email=email).exists():
-            messages.error(request, 'E-mail já cadastrado. Use outro e-mail.')
+        if Usuario.objects.filter(email=email).exists():
+            messages.error(request, 'E-mail já cadastrado!')
             return render(request, 'cadastro.html')
-        
-        try:
-            user = User.objects.create_user(
-                username=matricula,
-                password=senha,
-                email=email
-            )
-            
-            user.nome_completo = nome_completo
-            user.matricula = matricula
-            user.curso = curso
-            user.turma = turma
-            user.tipo_usuario = tipo_modelo
-            user.save()
-            
-            messages.success(request, 'Cadastro realizado com sucesso! Faça login.')
-            return redirect('login')
-            
-        except Exception as e:
-            messages.error(request, f'Erro ao cadastrar: {str(e)}')
-            return render(request, 'cadastro.html')
-    
+
+        usuario = Usuario(
+            matricula=matricula,
+            nome_completo=nome_completo,
+            curso=curso,
+            turma=turma,
+            email=email,
+            username=matricula,
+            tipo_usuario='ADMIN' if tipo_usuario == 'administrador' else 'ALUNO',
+            is_staff=tipo_usuario == 'administrador',
+        )
+        usuario.set_password(senha)
+        usuario.save()
+
+        messages.success(request, 'Cadastro realizado com sucesso! Faça login.')
+        return redirect('login')
+
     return render(request, 'cadastro.html')
 
 
 def logout_view(request):
     logout(request)
-    messages.success(request, 'Você saiu do sistema.')
+    messages.success(request, 'Você saiu da conta.')
     return redirect('login')
 
 
 @login_required
+def perfil_view(request):
+    return render(request, 'perfil.html')
+
+
+def contato_view(request):
+    return render(request, 'contato.html')
+
+
+@login_required
 def aluno_view(request):
-    if request.user.tipo_usuario != 'ALUNO':
-        messages.error(request, 'Acesso restrito a alunos.')
-        return redirect('index')
-    
-    avaliacoes = Avaliacao.objects.filter(
-        aluno=request.user
-    ).order_by('-data')[:5]
-    
-    context = {
-        'avaliacoes': avaliacoes,
-        'usuario': request.user,
-    }
-    return render(request, 'aluno.html', context)
+    minhas_avaliacoes = Avaliacao.objects.filter(aluno=request.user).order_by('-data')
+    return render(request, 'aluno.html', {
+        'minhas_avaliacoes': minhas_avaliacoes,
+    })
 
 
 @login_required
-def avaliar_view(request):
-    if request.user.tipo_usuario != 'ALUNO':
-        messages.error(request, 'Apenas alunos podem avaliar refeições.')
-        return redirect('index')
-    
+def avaliar_view(request, refeicao_id=None):
+    refeicao_obj = get_object_or_404(Refeicao, id=refeicao_id, ativo=True) if refeicao_id else None
+
     if request.method == 'POST':
-        try:
-            meal_name = request.POST.get('meal_name', '')
-            meal_type = request.POST.get('meal_type', '')
-            
-            avaliacao_geral = int(request.POST.get('avaliacaoGeral', 0))
-            sabor = int(request.POST.get('sabor', 0))
-            apresentacao = int(request.POST.get('apresentacao', 0))
-            temperatura = int(request.POST.get('temperatura', 0))
-            quantidade = int(request.POST.get('quantidade', 0))
-            comentario = request.POST.get('comentario', '')
-            
-            avaliacao = Avaliacao.objects.create(
-                aluno=request.user,
-                refeicao=f"{meal_type} - {meal_name}",
-                avaliacao_geral=avaliacao_geral,
-                sabor=sabor,
-                apresentacao=apresentacao,
-                temperatura=temperatura,
-                quantidade=quantidade,
-                comentario=comentario
-            )
-            
-            messages.success(request, 'Avaliação enviada com sucesso! Obrigado pelo feedback!')
-            return redirect('aluno')
-            
-        except Exception as e:
-            messages.error(request, f'Erro ao enviar avaliação: {str(e)}')
-            return render(request, 'avaliacao.html')
-    
-    return render(request, 'avaliacao.html')
+        refeicao_nome = request.POST.get('refeicao_nome') or request.POST.get('refeicao') or ''
+        if refeicao_obj:
+            refeicao_nome = str(refeicao_obj)
+
+        avaliacao_geral = request.POST.get('avaliacao_geral')
+        sabor = request.POST.get('sabor')
+        apresentacao = request.POST.get('apresentacao')
+        temperatura = request.POST.get('temperatura')
+        quantidade = request.POST.get('quantidade')
+        comentario = request.POST.get('comentario', '')
+
+        if not refeicao_nome:
+            messages.error(request, 'Selecione a refeição avaliada.')
+            return render(request, 'avaliacao.html', {'refeicao': refeicao_obj})
+        if not all([avaliacao_geral, sabor, apresentacao, temperatura, quantidade]):
+            messages.error(request, 'Avalie todos os itens antes de enviar.')
+            return render(request, 'avaliacao.html', {'refeicao': refeicao_obj})
+
+        Avaliacao.objects.create(
+            aluno=request.user,
+            refeicao=refeicao_nome,
+            avaliacao_geral=avaliacao_geral,
+            sabor=sabor,
+            apresentacao=apresentacao,
+            temperatura=temperatura,
+            quantidade=quantidade,
+            comentario=comentario,
+        )
+
+        messages.success(request, 'Avaliação enviada com sucesso!')
+        return redirect('aluno')
+
+    return render(request, 'avaliacao.html', {'refeicao': refeicao_obj})
 
 
-@login_required
+@admin_required
 def feedbacks_view(request):
-    if request.user.tipo_usuario != 'ADMIN':
-        messages.error(request, 'Acesso restrito a administradores.')
-        return redirect('index')
-    
-    avaliacoes = Avaliacao.objects.all().order_by('-data')
-    
-    feedbacks_data = []
-    for av in avaliacoes:
-        feedbacks_data.append({
-            'aluno': av.aluno.nome_completo,
-            'matricula': av.aluno.matricula,
-            'refeicao': av.refeicao,
-            'avaliacaoGeral': av.avaliacao_geral,
-            'sabor': av.sabor,
-            'apresentacao': av.apresentacao,
-            'temperatura': av.temperatura,
-            'quantidade': av.quantidade,
-            'comentario': av.comentario,
-            'data': av.data.strftime('%Y-%m-%d'),
-        })
-    
-    context = {
-        'feedbacks_json': json.dumps(feedbacks_data),
-        'total_feedbacks': len(feedbacks_data),
-    }
-    return render(request, 'feedbacks.html', context)
+    termo = (request.GET.get('q') or '').strip()
+    nota = request.GET.get('nota') or ''
+    avaliacoes = Avaliacao.objects.select_related('aluno').order_by('-data')
+
+    if termo:
+        avaliacoes = avaliacoes.filter(
+            Q(aluno__nome_completo__icontains=termo)
+            | Q(aluno__matricula__icontains=termo)
+            | Q(refeicao__icontains=termo)
+            | Q(comentario__icontains=termo)
+        )
+    if nota:
+        avaliacoes = avaliacoes.filter(avaliacao_geral=nota)
+
+    paginator = Paginator(avaliacoes, 10)
+    page_obj = paginator.get_page(request.GET.get('page'))
+    return render(request, 'feedbacks.html', {
+        'page_obj': page_obj,
+        'avaliacoes': page_obj.object_list,
+        'total_avaliacoes': avaliacoes.count(),
+        'termo': termo,
+        'nota': nota,
+    })
 
 
-@login_required
+@admin_required
 def relatorios_view(request):
-    if request.user.tipo_usuario != 'ADMIN':
-        messages.error(request, 'Acesso restrito a administradores.')
-        return redirect('index')
-    
     avaliacoes = Avaliacao.objects.all()
-    chart_data = {}
-    
-    if avaliacoes.count() > 0:
-        media_sabor = sum([a.sabor for a in avaliacoes]) / avaliacoes.count()
-        media_apresentacao = sum([a.apresentacao for a in avaliacoes]) / avaliacoes.count()
-        media_temperatura = sum([a.temperatura for a in avaliacoes]) / avaliacoes.count()
-        media_quantidade = sum([a.quantidade for a in avaliacoes]) / avaliacoes.count()
-        
-        distribuicao = {}
-        for i in range(1, 6):
-            distribuicao[i] = avaliacoes.filter(avaliacao_geral=i).count()
-        
-        por_refeicao = {}
-        for av in avaliacoes:
-            tipo = av.refeicao.split(' - ')[0]
-            por_refeicao[tipo] = por_refeicao.get(tipo, 0) + 1
-        
-        chart_data = {
-            'distribuicao': [distribuicao[1], distribuicao[2], distribuicao[3], distribuicao[4], distribuicao[5]],
-            'categorias': {
-                'sabor': round(media_sabor, 1),
-                'apresentacao': round(media_apresentacao, 1),
-                'temperatura': round(media_temperatura, 1),
-                'quantidade': round(media_quantidade, 1),
-            },
-            'por_refeicao': por_refeicao,
-            'total': avaliacoes.count(),
-        }
-    else:
-        chart_data = {
-            'distribuicao': [0, 0, 0, 0, 0],
-            'categorias': {
-                'sabor': 0,
-                'apresentacao': 0,
-                'temperatura': 0,
-                'quantidade': 0
-            },
-            'por_refeicao': {},
-            'total': 0,
-        }
-    
-    context = {
-        'chart_data': json.dumps(chart_data),
-        'total_feedbacks': avaliacoes.count(),
+    medias = avaliacoes.aggregate(
+        geral=Avg('avaliacao_geral'),
+        sabor=Avg('sabor'),
+        apresentacao=Avg('apresentacao'),
+        temperatura=Avg('temperatura'),
+        quantidade=Avg('quantidade'),
+    )
+
+    por_refeicao = list(
+        avaliacoes.values('refeicao')
+        .annotate(total=Count('id'))
+        .order_by('refeicao')
+    )
+    por_data = list(
+        avaliacoes.annotate(dia=TruncDate('data'))
+        .values('dia')
+        .annotate(media=Avg('avaliacao_geral'))
+        .order_by('dia')
+    )
+    chart_data = {
+        'distribuicao': [avaliacoes.filter(avaliacao_geral=nota).count() for nota in range(1, 6)],
+        'categorias': [
+            round(medias['sabor'] or 0, 1),
+            round(medias['apresentacao'] or 0, 1),
+            round(medias['temperatura'] or 0, 1),
+            round(medias['quantidade'] or 0, 1),
+        ],
+        'refeicoesLabels': [item['refeicao'] for item in por_refeicao],
+        'refeicoesValores': [item['total'] for item in por_refeicao],
+        'timelineLabels': [item['dia'].strftime('%d/%m') for item in por_data if item['dia']],
+        'timelineValores': [round(item['media'] or 0, 1) for item in por_data if item['dia']],
     }
-    return render(request, 'relatorios.html', context)
+
+    return render(request, 'relatorios.html', {
+        'total_avaliacoes': avaliacoes.count(),
+        'medias': medias,
+        'chart_data': chart_data,
+    })
+
+
+def cardapio_publico_view(request):
+    hoje = timezone.localdate()
+    termo = (request.GET.get('q') or '').strip()
+    tipo = request.GET.get('tipo') or ''
+    refeicoes = Refeicao.objects.filter(ativo=True, data__gte=hoje)
+
+    if termo:
+        refeicoes = refeicoes.filter(Q(titulo__icontains=termo) | Q(descricao__icontains=termo))
+    if tipo:
+        refeicoes = refeicoes.filter(tipo=tipo)
+
+    paginator = Paginator(refeicoes.order_by('data', 'tipo'), 9)
+    return render(request, 'cardapio.html', {
+        'page_obj': paginator.get_page(request.GET.get('page')),
+        'tipos_refeicao': Refeicao.TIPO_CHOICES,
+        'termo': termo,
+        'tipo': tipo,
+    })
+
+
+def refeicao_detalhes_view(request, pk):
+    refeicao = get_object_or_404(Refeicao, pk=pk, ativo=True)
+    avaliacoes = Avaliacao.objects.filter(refeicao__icontains=refeicao.titulo)[:10]
+    return render(request, 'refeicao_detalhes.html', {
+        'refeicao': refeicao,
+        'avaliacoes': avaliacoes,
+    })
+
+
+@admin_required
+def refeicao_list_view(request):
+    termo = (request.GET.get('q') or '').strip()
+    refeicoes = Refeicao.objects.all()
+    if termo:
+        refeicoes = refeicoes.filter(Q(titulo__icontains=termo) | Q(descricao__icontains=termo))
+    paginator = Paginator(refeicoes, 10)
+    return render(request, 'crud_refeicoes.html', {
+        'page_obj': paginator.get_page(request.GET.get('page')),
+        'termo': termo,
+    })
+
+
+@admin_required
+def refeicao_form_view(request, pk=None):
+    refeicao = get_object_or_404(Refeicao, pk=pk) if pk else None
+    form = RefeicaoForm(request.POST or None, instance=refeicao)
+    if request.method == 'POST' and form.is_valid():
+        form.save()
+        messages.success(request, 'Refeição salva com sucesso!')
+        return redirect('refeicao_list')
+    return render(request, 'form_refeicao.html', {'form': form, 'refeicao': refeicao})
+
+
+@admin_required
+def refeicao_delete_view(request, pk):
+    refeicao = get_object_or_404(Refeicao, pk=pk)
+    if request.method == 'POST':
+        refeicao.delete()
+        messages.success(request, 'Refeição excluída com sucesso!')
+        return redirect('refeicao_list')
+    return render(request, 'confirmar_exclusao.html', {
+        'objeto': refeicao,
+        'voltar_url': reverse('refeicao_list'),
+    })
+
+
+@admin_required
+def usuario_list_view(request):
+    termo = (request.GET.get('q') or '').strip()
+    usuarios = Usuario.objects.all()
+    if termo:
+        usuarios = usuarios.filter(
+            Q(nome_completo__icontains=termo)
+            | Q(matricula__icontains=termo)
+            | Q(email__icontains=termo)
+        )
+    paginator = Paginator(usuarios, 10)
+    return render(request, 'crud_usuarios.html', {
+        'page_obj': paginator.get_page(request.GET.get('page')),
+        'termo': termo,
+    })
+
+
+@admin_required
+def usuario_update_view(request, pk):
+    usuario = get_object_or_404(Usuario, pk=pk)
+    form = UsuarioFormEdicao(request.POST or None, instance=usuario)
+    if request.method == 'POST' and form.is_valid():
+        usuario = form.save(commit=False)
+        usuario.is_staff = usuario.tipo_usuario == 'ADMIN'
+        usuario.save()
+        messages.success(request, 'Usuário atualizado com sucesso!')
+        return redirect('usuario_list')
+    return render(request, 'form_usuario.html', {'form': form, 'usuario': usuario})
+
+
+@admin_required
+def usuario_delete_view(request, pk):
+    usuario = get_object_or_404(Usuario, pk=pk)
+    if request.method == 'POST':
+        usuario.delete()
+        messages.success(request, 'Usuário excluído com sucesso!')
+        return redirect('usuario_list')
+    return render(request, 'confirmar_exclusao.html', {
+        'objeto': usuario,
+        'voltar_url': reverse('usuario_list'),
+    })
+
+
+@admin_required
+def cardapio_list_view(request):
+    cardapios = Cardapio.objects.prefetch_related('refeicoes')
+    paginator = Paginator(cardapios, 10)
+    return render(request, 'crud_cardapios.html', {
+        'page_obj': paginator.get_page(request.GET.get('page')),
+    })
+
+
+@admin_required
+def cardapio_form_view(request, pk=None):
+    cardapio = get_object_or_404(Cardapio, pk=pk) if pk else None
+    form = CardapioForm(request.POST or None, instance=cardapio)
+    if request.method == 'POST' and form.is_valid():
+        form.save()
+        messages.success(request, 'Cardápio salvo com sucesso!')
+        return redirect('cardapio_list')
+    return render(request, 'form_cardapio.html', {'form': form, 'cardapio': cardapio})
+
+
+@admin_required
+def cardapio_delete_view(request, pk):
+    cardapio = get_object_or_404(Cardapio, pk=pk)
+    if request.method == 'POST':
+        cardapio.delete()
+        messages.success(request, 'Cardápio excluído com sucesso!')
+        return redirect('cardapio_list')
+    return render(request, 'confirmar_exclusao.html', {
+        'objeto': cardapio,
+        'voltar_url': reverse('cardapio_list'),
+    })

@@ -2,7 +2,7 @@
   <img src="static/img/logograndesf.png" alt="Capa do Projeto IFEED" width="35%">
 </p>
 
-<h1 align="center"> IFEED - Sistema de Feedback Alimentar</h1>
+<h1 align="center"> IFEED - UM SISTEMA WEB PARA FEEDBACK DA ALIMENTAÇÃO ESTUDANTIL</h1>
 
 ---
 
@@ -49,3 +49,79 @@ A arquitetura base do projeto está organizada utilizando o padrão de arquitetu
 * `static/img/` - Centralização de logotipos, favicons e elementos visuais do sistema.
 * `core/` - Aplicativo responsável pelas regras de negócio, controle de rotas (`urls.py`) e visualizações (`views.py`).
 * `ifeed_project/` - Diretório de configuração global do projeto Django.
+
+---
+
+### Como Executar o Projeto
+
+Para abrir o sistema localmente, acesse a pasta do projeto pelo terminal e execute os comandos abaixo:
+
+```bash
+python -m venv venv
+```
+
+No Windows, ative o ambiente virtual:
+
+```bash
+venv\Scripts\activate
+```
+
+Instale as dependências:
+
+```bash
+pip install -r requirements.txt
+```
+
+Execute as migrações do banco de dados:
+
+```bash
+python manage.py migrate
+```
+
+Inicie o servidor:
+
+```bash
+python manage.py runserver
+```
+
+Depois, acesse no navegador:
+
+```bash
+http://127.0.0.1:8000/
+```
+
+---
+
+### Como Acessar as Páginas
+
+| Página | Endereço |
+| :--- | :--- |
+| Página inicial | `http://127.0.0.1:8000/` |
+| Login | `http://127.0.0.1:8000/login/` |
+| Cadastro | `http://127.0.0.1:8000/cadastro/` |
+| Painel do aluno | `http://127.0.0.1:8000/aluno/` |
+| Avaliar refeição | `http://127.0.0.1:8000/avaliacao/` |
+| Cardápio público | `http://127.0.0.1:8000/cardapio/` |
+| Relatórios do administrador | `http://127.0.0.1:8000/relatorios/` |
+| Feedbacks | `http://127.0.0.1:8000/feedbacks/` |
+| CRUD de refeições | `http://127.0.0.1:8000/admin-ifeed/refeicoes/` |
+| CRUD de cardápios | `http://127.0.0.1:8000/admin-ifeed/cardapios/` |
+| CRUD de usuários | `http://127.0.0.1:8000/admin-ifeed/usuarios/` |
+
+---
+
+### Acesso de Usuários
+
+O sistema possui dois tipos principais de acesso:
+
+* **Aluno:** pode se cadastrar, fazer login, avaliar refeições e visualizar suas avaliações.
+* **Administrador:** pode acessar relatórios, feedbacks e as telas de gerenciamento do sistema.
+
+Caso utilize o banco de dados de exemplo enviado com o projeto, é possível acessar o painel administrativo com:
+
+```bash
+Matrícula: 20251198060015
+Senha: 123456
+```
+
+Também é possível criar um novo usuário pela página de cadastro e selecionar o tipo de usuário como administrador, caso essa opção esteja habilitada no formulário.

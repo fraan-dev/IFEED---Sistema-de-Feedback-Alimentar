@@ -4,59 +4,139 @@
 {% block title %}Avaliar Refeição - IFEED{% endblock %}
 
 {% block extra_css %}
-    <link rel="stylesheet" href="{% static 'estilos/avaliacao.css' %}">
+<link rel="stylesheet" href="{% static 'estilos/avaliacao.css' %}?v=2">
 {% endblock %}
 
 {% block content %}
 <main class="avaliacao-main">
+    <a href="{% url 'aluno' %}" class="back-link">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M19 12H5M12 19l-7-7 7-7"/>
+        </svg>
+        Voltar
+    </a>
 
-    <a href="#" id="back-link" class="back-link">← Voltar</a>
-
-    <div class="meal-banner" id="meal-banner">
-        <small id="meal-type">Almoço</small>
-        <h2 id="meal-name">Nome da Refeição</h2>
-        <p id="meal-desc">Descrição breve da refeição</p>
+    <div class="meal-banner">
+        <div class="banner-content">
+            <div class="banner-icon">🍽️</div>
+            <div>
+                <span class="banner-tag">Avaliação do dia</span>
+                <h2>Como foi sua refeição?</h2>
+                <p>Sua opinião é essencial para melhorarmos cada vez mais!</p>
+            </div>
+        </div>
     </div>
 
-    <form id="avaliacao-form" class="avaliacao-form">
-        <fieldset>
-            <legend>Avaliação Geral</legend>
-            <div class="stars" data-field="avaliacaoGeral"></div>
-        </fieldset>
+    <div class="meal-info-cards">
+        <div class="info-card">
+            <span class="info-icon">📅</span>
+            <div>
+                <small>Data</small>
+                <strong>{% now "d/m/Y" %}</strong>
+            </div>
+        </div>
+        <div class="info-card">
+            <span class="info-icon">⏰</span>
+            <div>
+                <small>Refeição</small>
+                <strong>Hoje</strong>
+            </div>
+        </div>
+        <div class="info-card">
+            <span class="info-icon">👤</span>
+            <div>
+                <small>Aluno</small>
+                <strong>{{ request.user.get_full_name|default:request.user.username }}</strong>
+            </div>
+        </div>
+    </div>
 
-        <div class="two-columns">
-            <fieldset>
-                <legend>Sabor</legend>
+    <form id="avaliacao-form" class="avaliacao-form" method="post">
+        {% csrf_token %}
+
+        <div class="form-group">
+            <label for="refeicao_nome">Qual refeição você está avaliando?</label>
+            <select id="refeicao_nome" name="refeicao_nome" required>
+                <option value="">Selecione...</option>
+                <option value="Café da Manhã" {% if request.GET.refeicao == "Café da Manhã" %}selected{% endif %}>Café da Manhã</option>
+                <option value="Lanche da Manhã" {% if request.GET.refeicao == "Lanche da Manhã" %}selected{% endif %}>Lanche da Manhã</option>
+                <option value="Almoço" {% if request.GET.refeicao == "Almoço" %}selected{% endif %}>Almoço</option>
+                <option value="Jantar" {% if request.GET.refeicao == "Jantar" %}selected{% endif %}>Jantar</option>
+                <option value="Lanche da Tarde" {% if request.GET.refeicao == "Lanche da Tarde" %}selected{% endif %}>Lanche da Tarde</option>
+                <option value="Ceia" {% if request.GET.refeicao == "Ceia" %}selected{% endif %}>Ceia</option>
+            </select>
+        </div>
+
+        <div class="progress-wrapper">
+            <div class="progress-bar">
+                <div class="progress-fill" style="width: 0%"></div>
+            </div>
+            <span class="progress-text">0/5 avaliados</span>
+        </div>
+
+        <div class="rating-group rating-primary">
+            <div class="rating-header">
+                <span class="rating-emoji">⭐</span>
+                <div>
+                    <legend>Avaliação Geral</legend>
+                    <p class="rating-desc">Como você classifica esta refeição como um todo?</p>
+                </div>
+            </div>
+            <div class="stars" data-field="avaliacao_geral"></div>
+        </div>
+
+        <div class="rating-grid">
+            <div class="rating-group">
+                <div class="rating-header-mini">
+                    <span class="rating-emoji-mini">👨‍🍳</span>
+                    <legend>Sabor</legend>
+                </div>
                 <div class="stars" data-field="sabor"></div>
-            </fieldset>
+            </div>
 
-            <fieldset>
-                <legend>Apresentação</legend>
+            <div class="rating-group">
+                <div class="rating-header-mini">
+                    <span class="rating-emoji-mini"></span>
+                    <legend>Apresentação</legend>
+                </div>
                 <div class="stars" data-field="apresentacao"></div>
-            </fieldset>
-        </div>
+            </div>
 
-        <div class="two-columns">
-            <fieldset>
-                <legend>Temperatura</legend>
+            <div class="rating-group">
+                <div class="rating-header-mini">
+                    <span class="rating-emoji-mini"></span>
+                    <legend>Temperatura</legend>
+                </div>
                 <div class="stars" data-field="temperatura"></div>
-            </fieldset>
+            </div>
 
-            <fieldset>
-                <legend>Quantidade</legend>
+            <div class="rating-group">
+                <div class="rating-header-mini">
+                    <span class="rating-emoji-mini"></span>
+                    <legend>Quantidade</legend>
+                </div>
                 <div class="stars" data-field="quantidade"></div>
-            </fieldset>
+            </div>
         </div>
 
-        <label for="comentario">Comentário (opcional)</label>
-        <textarea id="comentario" name="comentario" placeholder="Compartilhe sua opinião sobre a refeição..."></textarea>
+        <div class="comment-section">
+            <label for="comentario">
+                💬 Comentário <span class="optional">(opcional)</span>
+            </label>
+            <textarea id="comentario" name="comentario" placeholder="Compartilhe sua opinião sobre a refeição..."></textarea>
+            <span class="char-counter">0/500</span>
+        </div>
 
-        <button type="submit" class="btn submit">Enviar Avaliação</button>
+        <button type="submit" class="btn submit">
+            <span>Enviar Avaliação</span>
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M22 2L11 13M22 2l-7 20-4-9-9-4 20-7z"/>
+            </svg>
+        </button>
     </form>
-
 </main>
 {% endblock %}
 
 {% block extra_js %}
-    <script src="{% static 'scripts/avaliacao.js' %}"></script>
+<script src="{% static 'scripts/avaliacao.js' %}?v=2"></script>
 {% endblock %}

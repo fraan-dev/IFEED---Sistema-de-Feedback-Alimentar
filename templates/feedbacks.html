@@ -11,43 +11,63 @@
 <main class="admin-main">
 
     <h1>Todos os Feedbacks</h1>
-    <p class="page-subtitle"><span id="feedback-count">0</span> avaliações encontradas</p>
+    <p class="page-subtitle"><span id="feedback-count">{{ total_avaliacoes }}</span> avaliações encontradas</p>
 
-    <div class="filters-section">
+    <form method="get" class="filters-section">
         <div class="search-box">
-            <input type="text" id="search-input" placeholder="🔍 Buscar por aluno, refeição ou comentário..." />
+            <input type="text" name="q" value="{{ termo }}" placeholder="🔍 Buscar por aluno, refeição ou comentário..." />
         </div>
 
         <div class="filter-box">
             <label for="filter-rating">Filtrar por avaliação</label>
-            <select id="filter-rating">
+            <select id="filter-rating" name="nota">
                 <option value="">Todas as avaliações</option>
-                <option value="5">⭐⭐⭐⭐⭐ (5 estrelas)</option>
-                <option value="4">⭐⭐⭐⭐ (4 estrelas)</option>
-                <option value="3">⭐⭐⭐ (3 estrelas)</option>
-                <option value="2">⭐⭐ (2 estrelas)</option>
-                <option value="1">⭐ (1 estrela)</option>
+                <option value="5" {% if nota == "5" %}selected{% endif %}>⭐⭐⭐⭐⭐ (5 estrelas)</option>
+                <option value="4" {% if nota == "4" %}selected{% endif %}>⭐⭐⭐⭐ (4 estrelas)</option>
+                <option value="3" {% if nota == "3" %}selected{% endif %}>⭐⭐⭐ (3 estrelas)</option>
+                <option value="2" {% if nota == "2" %}selected{% endif %}>⭐⭐ (2 estrelas)</option>
+                <option value="1" {% if nota == "1" %}selected{% endif %}>⭐ (1 estrela)</option>
             </select>
         </div>
-    </div>
+
+        <button type="submit" class="btn-secondary">Filtrar</button>
+    </form>
 
     <div class="feedbacks-container" id="feedbacks-container">
-        </div>
-
-</main>
-
-<div id="logout-modal" class="modal" style="display:none">
-    <div class="modal-content">
-        <h2>Sair da Conta</h2>
-        <p>Tem certeza que deseja sair?</p>
-        <div class="modal-actions">
-            <button id="logout-confirm" class="btn-danger">Sair</button>
-            <button id="logout-cancel" class="btn-secondary">Cancelar</button>
-        </div>
+        {% for avaliacao in avaliacoes %}
+            <article class="feedback-card">
+                <div class="feedback-header">
+                    <div>
+                        <h3>{{ avaliacao.aluno.nome_completo }}</h3>
+                        <small>{{ avaliacao.refeicao }}</small>
+                    </div>
+                    <span class="feedback-rating">⭐ {{ avaliacao.avaliacao_geral }}/5</span>
+                </div>
+                {% if avaliacao.comentario %}
+                    <p class="feedback-comment">"{{ avaliacao.comentario }}"</p>
+                {% else %}
+                    <p class="feedback-comment empty">Sem comentário</p>
+                {% endif %}
+                <div class="feedback-footer"><small>{{ avaliacao.data|date:"d/m/Y H:i" }}</small></div>
+            </article>
+        {% empty %}
+            <p class="empty-state">Nenhum feedback encontrado com esses filtros.</p>
+        {% endfor %}
     </div>
-</div>
+
+    {% if page_obj.has_other_pages %}
+        <div class="pagination">
+            {% if page_obj.has_previous %}
+                <a href="?page={{ page_obj.previous_page_number }}{% if termo %}&q={{ termo }}{% endif %}{% if nota %}&nota={{ nota }}{% endif %}">Anterior</a>
+            {% endif %}
+            <span>Página {{ page_obj.number }} de {{ page_obj.paginator.num_pages }}</span>
+            {% if page_obj.has_next %}
+                <a href="?page={{ page_obj.next_page_number }}{% if termo %}&q={{ termo }}{% endif %}{% if nota %}&nota={{ nota }}{% endif %}">Próxima</a>
+            {% endif %}
+        </div>
+    {% endif %}
+</main>
 {% endblock %}
 
 {% block extra_js %}
-    <script src="{% static 'scripts/admin.js' %}"></script>
 {% endblock %}
