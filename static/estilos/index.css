@@ -7,18 +7,20 @@
 
 body {
     font-family: 'Poppins', sans-serif;
-    background: #f0f4f8;
+    background:
+        radial-gradient(circle at top left, rgba(47, 133, 90, 0.12), transparent 34rem),
+        linear-gradient(180deg, #f7fafc 0%, #f0f5f1 100%);
     min-height: 100vh;
     display: flex;
     flex-direction: column;
-    color: #1a2a3a;
+    color: #1c4532;
 }
 
 main {
     flex: 1;
     max-width: 1280px;
     margin: 0 auto;
-    padding: 2rem 2rem 4rem;
+    padding: 2rem 2rem 5rem;
     width: 100%;
 }
 
@@ -28,21 +30,22 @@ main {
     grid-template-columns: 1fr 1fr;
     gap: 4rem;
     align-items: center;
-    padding: 3rem 0 4rem;
+    padding: 4rem 0 5rem;
 }
 
 .hero-text h2 {
-    font-size: 2.5rem;
-    color: #1a2a3a;
-    font-weight: 700;
-    line-height: 1.2;
+    font-size: clamp(2rem, 4vw, 2.75rem);
+    color: #1c4532;
+    font-weight: 800;
+    line-height: 1.12;
+    letter-spacing: -0.02em;
     margin-bottom: 1.5rem;
 }
 
 .hero-text p {
     font-size: 1.1rem;
-    color: #4a5a5a;
-    line-height: 1.8;
+    color: #4a5568;
+    line-height: 1.6;
     margin-bottom: 2rem;
 }
 
@@ -54,55 +57,57 @@ main {
 
 .btn-primary {
     padding: 0.8rem 2.5rem;
-    background: #2f9b4a;
+    background: #2f855a;
     color: white;
     border-radius: 50px;
     text-decoration: none;
     font-weight: 600;
-    transition: all 0.3s ease;
+    transition: background-color 0.2s ease-in-out, transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
     display: inline-block;
 }
 
 .btn-primary:hover {
-    background: #1a6b2e;
-    transform: translateY(-2px);
-    box-shadow: 0 6px 20px rgba(47, 155, 74, 0.3);
+    background: #22543d;
+    transform: translateY(-1px);
+    box-shadow: 0 10px 22px rgba(47, 133, 90, 0.22);
 }
 
 .btn-secondary {
     padding: 0.8rem 2.5rem;
     background: transparent;
-    color: #2f9b4a;
-    border: 2px solid #2f9b4a;
+    color: #2f855a;
+    border: 2px solid #2f855a;
     border-radius: 50px;
     text-decoration: none;
     font-weight: 600;
-    transition: all 0.3s ease;
+    transition: background-color 0.2s ease-in-out, color 0.2s ease-in-out, transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
     display: inline-block;
 }
 
 .btn-secondary:hover {
-    background: #2f9b4a;
+    background: #2f855a;
     color: white;
-    transform: translateY(-2px);
-    box-shadow: 0 6px 20px rgba(47, 155, 74, 0.2);
+    transform: translateY(-1px);
+    box-shadow: 0 10px 22px rgba(47, 133, 90, 0.18);
 }
 
 .hero-image img {
     max-width: 100%;
     height: auto;
-    filter: drop-shadow(0 8px 30px rgba(0, 0, 0, 0.1));
+    filter: drop-shadow(0 16px 32px rgba(28, 69, 50, 0.12));
 }
 
 /* ===== CARDS SECTION ===== */
 .cards-section {
-    padding: 3rem 0;
+    padding: 5rem 0;
+    scroll-margin-top: 96px;
 }
 
 .cards-section h2 {
     text-align: center;
     font-size: 2.2rem;
-    color: #1a2a3a;
+    color: #1c4532;
+    letter-spacing: -0.02em;
     margin-bottom: 3rem;
 }
 
@@ -115,15 +120,17 @@ main {
 .card {
     background: white;
     padding: 2rem;
-    border-radius: 20px;
+    border: 1px solid #e2e8f0;
+    border-radius: 16px;
     text-align: center;
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06);
-    transition: all 0.3s ease;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
+    transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out, border-color 0.2s ease-in-out;
 }
 
 .card:hover {
-    transform: translateY(-8px);
-    box-shadow: 0 8px 40px rgba(0, 0, 0, 0.1);
+    transform: translateY(-3px);
+    border-color: rgba(47, 133, 90, 0.28);
+    box-shadow: 0 14px 28px rgba(28, 69, 50, 0.08);
 }
 
 .card-icon {
@@ -133,25 +140,27 @@ main {
 
 .card h3 {
     font-size: 1.2rem;
-    color: #1a2a3a;
+    color: #1c4532;
     margin-bottom: 0.8rem;
 }
 
 .card p {
-    color: #5a6a6a;
+    color: #4a5568;
     line-height: 1.6;
     font-size: 0.95rem;
 }
 
 /* ===== CARDÁPIO ===== */
 .cardapio {
-    padding: 3rem 0;
+    padding: 5rem 0;
+    scroll-margin-top: 96px;
 }
 
 .cardapio h2 {
     text-align: center;
     font-size: 2.2rem;
-    color: #1a2a3a;
+    color: #1c4532;
+    letter-spacing: -0.02em;
     margin-bottom: 3rem;
 }
 
@@ -164,36 +173,40 @@ main {
 .menu-item {
     background: white;
     padding: 2rem;
-    border-radius: 20px;
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06);
-    transition: all 0.3s ease;
+    border: 1px solid #e2e8f0;
+    border-radius: 16px;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
+    transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out, border-color 0.2s ease-in-out;
 }
 
 .menu-item:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 8px 40px rgba(0, 0, 0, 0.1);
+    transform: translateY(-3px);
+    border-color: rgba(47, 133, 90, 0.28);
+    box-shadow: 0 14px 28px rgba(28, 69, 50, 0.08);
 }
 
 .menu-item h3 {
-    color: #2f9b4a;
+    color: #2f855a;
     font-size: 1.2rem;
     margin-bottom: 0.8rem;
 }
 
 .menu-item p {
-    color: #4a5a5a;
+    color: #4a5568;
     line-height: 1.6;
 }
 
 /* ===== AVISOS ===== */
 .avisos {
-    padding: 3rem 0;
+    padding: 5rem 0;
+    scroll-margin-top: 96px;
 }
 
 .avisos h2 {
     text-align: center;
     font-size: 2.2rem;
-    color: #1a2a3a;
+    color: #1c4532;
+    letter-spacing: -0.02em;
     margin-bottom: 3rem;
 }
 
@@ -206,25 +219,27 @@ main {
 .aviso-box {
     background: white;
     padding: 2rem;
-    border-radius: 20px;
-    border-left: 5px solid #2f9b4a;
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06);
-    transition: all 0.3s ease;
+    border-radius: 16px;
+    border: 1px solid #e2e8f0;
+    border-left: 5px solid #2f855a;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
+    transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out, border-color 0.2s ease-in-out;
 }
 
 .aviso-box:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 8px 40px rgba(0, 0, 0, 0.1);
+    transform: translateY(-3px);
+    border-color: rgba(47, 133, 90, 0.28);
+    box-shadow: 0 14px 28px rgba(28, 69, 50, 0.08);
 }
 
 .aviso-box h3 {
-    color: #1a2a3a;
+    color: #1c4532;
     font-size: 1.1rem;
     margin-bottom: 0.8rem;
 }
 
 .aviso-box p {
-    color: #4a5a5a;
+    color: #4a5568;
     line-height: 1.6;
 }
 

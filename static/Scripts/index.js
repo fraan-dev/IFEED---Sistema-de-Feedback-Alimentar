@@ -1,34 +1,40 @@
-
-
 document.addEventListener('DOMContentLoaded', function () {
+    function scrollToTarget(target, updateHash) {
+        const header = document.querySelector('.header');
+        const headerHeight = header ? header.offsetHeight : 0;
+        const top = target.getBoundingClientRect().top + window.scrollY - headerHeight - 18;
 
-   
-    document.querySelectorAll('a[href*="#"]').forEach(function (link) {
-        link.addEventListener('click', function (e) {
-            const href = link.getAttribute('href');
-            const hashIndex = href.indexOf('#');
-            if (hashIndex === -1) return;
+        window.scrollTo({ top: top, behavior: 'smooth' });
 
-            const targetId = href.substring(hashIndex + 1);
-            const target = document.getElementById(targetId);
+        if (updateHash) {
+            history.replaceState(null, '', '#' + target.id);
+        }
+    }
 
-            
-            if (target) {
-                e.preventDefault();
-                const headerHeight = document.querySelector('.header')
-                    ? document.querySelector('.header').offsetHeight
-                    : 0;
-                const top = target.getBoundingClientRect().top + window.scrollY - headerHeight - 10;
+    document.querySelectorAll('a[href^="#"], a[href*="/#"]').forEach(function (link) {
+        link.addEventListener('click', function (event) {
+            const url = new URL(link.getAttribute('href'), window.location.origin);
 
-                window.scrollTo({ top: top, behavior: 'smooth' });
-            }
+            if (url.pathname !== window.location.pathname || !url.hash) return;
+
+            const target = document.querySelector(url.hash);
+            if (!target) return;
+
+            event.preventDefault();
+            scrollToTarget(target, true);
         });
     });
 
-    
-    const animatedItems = document.querySelectorAll(
-        '.card, .menu-item, .aviso-box'
-    );
+    if (window.location.hash) {
+        const target = document.querySelector(window.location.hash);
+        if (target) {
+            setTimeout(function () {
+                scrollToTarget(target, false);
+            }, 100);
+        }
+    }
+
+    const animatedItems = document.querySelectorAll('.card, .menu-item, .aviso-box');
 
     if ('IntersectionObserver' in window && animatedItems.length) {
         animatedItems.forEach(function (item) {

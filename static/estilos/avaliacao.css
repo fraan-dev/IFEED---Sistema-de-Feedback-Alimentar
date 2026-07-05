@@ -440,3 +440,21 @@
         font-size: 2rem !important;
     }
 }
+/* Banner verde da página de avaliação */
+.avaliacao-main .meal-banner,
+.avaliacao-main .meal-banner h1,
+.avaliacao-main .meal-banner h2,
+.avaliacao-main .meal-banner h3,
+.avaliacao-main .meal-banner p,
+.avaliacao-main .meal-banner span,
+.avaliacao-main .meal-banner .banner-tag {
+    color: #ffffff !important;
+}
+
+.avaliacao-main .meal-banner p {
+    opacity: 0.95;
+}
+
+.avaliacao-main .banner-tag {
+    background: rgba(255, 255, 255, 0.22);
+}

@@ -46,7 +46,7 @@
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a href="{% url 'cardapio_publico' %}" class="nav-link">
+                        <a href="{% url 'index' %}#cardapio-semana" class="nav-link">
                             <i class="fas fa-utensils"></i>
                             <span>Cardápio</span>
                         </a>
@@ -108,7 +108,7 @@
         <div class="mobile-menu" id="mobileMenu">
             <ul class="mobile-nav-list">
                 <li><a href="{% url 'index' %}"><i class="fas fa-home"></i> Início</a></li>
-                <li><a href="{% url 'cardapio_publico' %}"><i class="fas fa-utensils"></i> Cardápio</a></li>
+                <li><a href="{% url 'index' %}#cardapio-semana"><i class="fas fa-utensils"></i> Cardápio</a></li>
                 <li><a href="{% url 'index' %}#informacoes"><i class="fas fa-info-circle"></i> Informações</a></li>
                 <li><a href="{% url 'index' %}#avisos"><i class="fas fa-bullhorn"></i> Avisos</a></li>
                 {% if not user.is_authenticated %}
@@ -161,7 +161,7 @@
                     <h4>Navegação</h4>
                     <ul>
                         <li><a href="{% url 'index' %}">Início</a></li>
-                        <li><a href="{% url 'cardapio_publico' %}">Cardápio</a></li>
+                        <li><a href="{% url 'index' %}#cardapio-semana">Cardápio</a></li>
                         <li><a href="{% url 'index' %}#informacoes">Informações</a></li>
                         <li><a href="{% url 'index' %}#avisos">Avisos</a></li>
                     </ul>

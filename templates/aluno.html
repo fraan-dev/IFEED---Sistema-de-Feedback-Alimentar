@@ -10,6 +10,14 @@
 {% block content %}
 <main class="aluno-main">
 
+    <!-- BANNER DE AVALIAÇÃO DO DIA -->
+    <section class="avaliacao-dia-banner">
+        <h1>AVALIAÇÃO DO DIA</h1>
+        <p class="avaliacao-subtitle">Como foi sua refeição?</p>
+        <p class="avaliacao-text">Sua opinião é essencial para melhorarmos o estado em nível</p>
+        <a href="{% url 'avaliacao' %}" class="btn-avaliar-agora">Avaliar Agora</a>
+    </section>
+
     <section class="today-meals">
         <h2>Refeições de Hoje</h2>
 

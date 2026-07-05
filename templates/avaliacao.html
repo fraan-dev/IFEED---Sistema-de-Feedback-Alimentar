@@ -18,7 +18,7 @@
 
     <div class="meal-banner">
         <div class="banner-content">
-            <div class="banner-icon">🍽️</div>
+            <div class="banner-icon"></div>
             <div>
                 <span class="banner-tag">Avaliação do dia</span>
                 <h2>Como foi sua refeição?</h2>
@@ -29,21 +29,21 @@
 
     <div class="meal-info-cards">
         <div class="info-card">
-            <span class="info-icon">📅</span>
+            <span class="info-icon"></span>
             <div>
                 <small>Data</small>
                 <strong>{% now "d/m/Y" %}</strong>
             </div>
         </div>
         <div class="info-card">
-            <span class="info-icon">⏰</span>
+            <span class="info-icon"></span>
             <div>
                 <small>Refeição</small>
                 <strong>Hoje</strong>
             </div>
         </div>
         <div class="info-card">
-            <span class="info-icon">👤</span>
+            <span class="info-icon"></span>
             <div>
                 <small>Aluno</small>
                 <strong>{{ request.user.get_full_name|default:request.user.username }}</strong>
@@ -58,12 +58,10 @@
             <label for="refeicao_nome">Qual refeição você está avaliando?</label>
             <select id="refeicao_nome" name="refeicao_nome" required>
                 <option value="">Selecione...</option>
-                <option value="Café da Manhã" {% if request.GET.refeicao == "Café da Manhã" %}selected{% endif %}>Café da Manhã</option>
                 <option value="Lanche da Manhã" {% if request.GET.refeicao == "Lanche da Manhã" %}selected{% endif %}>Lanche da Manhã</option>
                 <option value="Almoço" {% if request.GET.refeicao == "Almoço" %}selected{% endif %}>Almoço</option>
-                <option value="Jantar" {% if request.GET.refeicao == "Jantar" %}selected{% endif %}>Jantar</option>
                 <option value="Lanche da Tarde" {% if request.GET.refeicao == "Lanche da Tarde" %}selected{% endif %}>Lanche da Tarde</option>
-                <option value="Ceia" {% if request.GET.refeicao == "Ceia" %}selected{% endif %}>Ceia</option>
+                <option value="Jantar" {% if request.GET.refeicao == "Jantar" %}selected{% endif %}>Jantar</option>
             </select>
         </div>
 
@@ -88,7 +86,7 @@
         <div class="rating-grid">
             <div class="rating-group">
                 <div class="rating-header-mini">
-                    <span class="rating-emoji-mini">👨‍🍳</span>
+                    <span class="rating-emoji-mini"></span>
                     <legend>Sabor</legend>
                 </div>
                 <div class="stars" data-field="sabor"></div>
@@ -121,7 +119,7 @@
 
         <div class="comment-section">
             <label for="comentario">
-                💬 Comentário <span class="optional">(opcional)</span>
+                 Comentário <span class="optional">(opcional)</span>
             </label>
             <textarea id="comentario" name="comentario" placeholder="Compartilhe sua opinião sobre a refeição..."></textarea>
             <span class="char-counter">0/500</span>
