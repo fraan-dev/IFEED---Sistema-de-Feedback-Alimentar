@@ -1,3 +1,6 @@
+from datetime import timedelta
+import re
+
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
@@ -30,10 +33,128 @@ def admin_required(view_func):
     return wrapper
 
 
+def nome_principal_refeicao(titulo):
+    titulo_base = re.sub(r'\s+-\s+Semana\s+\d+\s+Dia\s+\d+', '', titulo or '').strip()
+    titulo_lower = titulo_base.lower()
+    nomes = [
+        ('macarronada de carne moída', 'Macarronada de Carne Moída'),
+        ('arroz com frango desfiado', 'Arroz com Frango Desfiado'),
+        ('biscoito cream cracker', 'Biscoito Cream Cracker com Queijo'),
+        ('bolo de ovos', 'Bolo de Ovos'),
+        ('mingau de aveia', 'Mingau de Aveia'),
+        ('carne moída', 'Carne Moída'),
+        ('carne guisada', 'Carne Guisada'),
+        ('frango cozido', 'Frango Cozido'),
+        ('frango assado', 'Frango Assado'),
+        ('arroz com frango', 'Arroz com Frango'),
+        ('biscoito', 'Biscoito com Suco'),
+        ('frutas', 'Frutas com Bolo'),
+        ('cuscuz', 'Cuscuz com Café'),
+        ('lasanha', 'Lasanha'),
+        ('panqueca', 'Panqueca'),
+    ]
+    for chave, nome in nomes:
+        if chave in titulo_lower:
+            return nome
+    return titulo_base
+
+
+def separar_acompanhamentos(descricao):
+    texto = (descricao or '').strip().rstrip('.')
+    substituicoes = {
+        ' acompanhado de ': ', ',
+        ' acompanhada de ': ', ',
+        ' acompanhados de ': ', ',
+        ' acompanhadas de ': ', ',
+        'Opção semelhante ao almoço com ': '',
+        'opção mais leve para o período da noite': '',
+        'Porção de ': '',
+        ' da estação com ': ', ',
+    }
+    for antigo, novo in substituicoes.items():
+        texto = texto.replace(antigo, novo)
+    itens = [item.strip().capitalize() for item in re.split(r',|\se\s', texto) if item.strip()]
+    return itens[:6]
+
+
+def remover_repeticoes_principal(principal, acompanhamentos):
+    palavras_ignoradas = {'com', 'de', 'da', 'do', 'das', 'dos', 'e', 'ao', 'a'}
+    palavras_principal = {
+        palavra for palavra in re.findall(r'[a-zá-ú]+', (principal or '').lower())
+        if len(palavra) > 2 and palavra not in palavras_ignoradas
+    }
+    filtrados = []
+    for item in acompanhamentos:
+        palavras_item = set(re.findall(r'[a-zá-ú]+', item.lower()))
+        if palavras_principal.intersection(palavras_item):
+            continue
+        filtrados.append(item)
+    return filtrados
+
+
+def formatar_refeicao_cardapio(refeicao):
+    principal = nome_principal_refeicao(refeicao.titulo)
+    acompanhamentos = separar_acompanhamentos(refeicao.descricao)
+    return {
+        'id': refeicao.id,
+        'nome_principal': principal,
+        'acompanhamentos': remover_repeticoes_principal(principal, acompanhamentos),
+    }
+
+
 def index_view(request):
     hoje = timezone.localdate()
-    cardapios = Cardapio.objects.filter(ativo=True, data_fim__gte=hoje).prefetch_related('refeicoes')[:2]
-    return render(request, 'index.html', {'cardapios': cardapios})
+    cardapio_atual = (
+        Cardapio.objects.filter(ativo=True, data_fim__gte=hoje)
+        .prefetch_related('refeicoes')
+        .order_by('data_inicio')
+        .first()
+    )
+
+    tipos_refeicao = [
+        ('CAFE', 'Café da Manhã'),
+        ('ALMOCO', 'Almoço'),
+        ('LANCHE', 'Lanche da Tarde'),
+        ('JANTAR', 'Jantar'),
+    ]
+    dias_semana = [
+        (0, 'Segunda-feira'),
+        (1, 'Terça-feira'),
+        (2, 'Quarta-feira'),
+        (3, 'Quinta-feira'),
+        (4, 'Sexta-feira'),
+    ]
+    cardapio_semana = []
+
+    if cardapio_atual:
+        refeicoes = list(cardapio_atual.refeicoes.filter(ativo=True).order_by('data', 'tipo', 'titulo'))
+        for codigo, rotulo in tipos_refeicao:
+            dias = []
+            for deslocamento, nome_dia in dias_semana:
+                data_dia = cardapio_atual.data_inicio + timedelta(days=deslocamento)
+                refeicao = next(
+                    (
+                        item for item in refeicoes
+                        if item.tipo == codigo and item.data == data_dia
+                    ),
+                    None
+                )
+                dias.append({
+                    'nome': nome_dia,
+                    'data': data_dia,
+                    'refeicao': formatar_refeicao_cardapio(refeicao) if refeicao else None,
+                })
+            cardapio_semana.append({
+                'codigo': codigo,
+                'rotulo': rotulo,
+                'ativo': codigo == 'ALMOCO',
+                'dias': dias,
+            })
+
+    return render(request, 'index.html', {
+        'cardapio_atual': cardapio_atual,
+        'cardapio_semana': cardapio_semana,
+    })
 
 
 def login_view(request):
@@ -127,6 +248,32 @@ def contato_view(request):
     return render(request, 'contato.html')
 
 
+def horarios_view(request):
+    horarios = [
+        {
+            'refeicao': 'Lanche da Manhã',
+            'horario': '08h40 às 09h00',
+            'observacao': 'Primeira pausa alimentar do dia.',
+        },
+        {
+            'refeicao': 'Almoço',
+            'horario': '11h30 às 13h00',
+            'observacao': 'Principal refeição do turno diurno.',
+        },
+        {
+            'refeicao': 'Lanche da Tarde',
+            'horario': '14h40 às 15h00',
+            'observacao': 'Pausa rápida para o turno da tarde.',
+        },
+        {
+            'refeicao': 'Jantar',
+            'horario': '17h40 às 18h30',
+            'observacao': 'Refeição final do dia no refeitório.',
+        },
+    ]
+    return render(request, 'horarios.html', {'horarios': horarios})
+
+
 @login_required
 def aluno_view(request):
     minhas_avaliacoes = Avaliacao.objects.filter(aluno=request.user).order_by('-data')
@@ -213,11 +360,16 @@ def relatorios_view(request):
         quantidade=Avg('quantidade'),
     )
 
-    por_refeicao = list(
-        avaliacoes.values('refeicao')
-        .annotate(total=Count('id'))
-        .order_by('refeicao')
-    )
+    tipos_refeicao = [
+        ('Café da Manhã', Q(refeicao__icontains='Café da Manhã')),
+        ('Almoço', Q(refeicao__icontains='Almoço')),
+        ('Lanche da Tarde', Q(refeicao__icontains='Lanche da Tarde')),
+        ('Jantar', Q(refeicao__icontains='Jantar')),
+    ]
+    por_refeicao = [
+        {'refeicao': rotulo, 'total': avaliacoes.filter(filtro).count()}
+        for rotulo, filtro in tipos_refeicao
+    ]
     por_data = list(
         avaliacoes.annotate(dia=TruncDate('data'))
         .values('dia')
@@ -356,10 +508,19 @@ def usuario_delete_view(request, pk):
 
 @admin_required
 def cardapio_list_view(request):
+    termo = (request.GET.get('q') or '').strip()
     cardapios = Cardapio.objects.prefetch_related('refeicoes')
+    if termo:
+        cardapios = cardapios.filter(
+            Q(nome__icontains=termo)
+            | Q(refeicoes__titulo__icontains=termo)
+            | Q(refeicoes__descricao__icontains=termo)
+            | Q(refeicoes__tipo__icontains=termo)
+        ).distinct()
     paginator = Paginator(cardapios, 10)
     return render(request, 'crud_cardapios.html', {
         'page_obj': paginator.get_page(request.GET.get('page')),
+        'termo': termo,
     })
 
 

@@ -1,0 +1,27 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Horários do Refeitório - IFEED{% endblock %}
+
+{% block extra_css %}
+    <link rel="stylesheet" href="{% static 'estilos/index.css' %}">
+{% endblock %}
+
+{% block content %}
+<main class="horarios-page">
+    <section class="horarios-hero">
+        <h1>Horários do Refeitório</h1>
+        <p>Consulte os horários de funcionamento das refeições servidas no campus.</p>
+    </section>
+
+    <section class="horarios-grid" aria-label="Horários das refeições">
+        {% for item in horarios %}
+            <article class="horario-card">
+                <h2>{{ item.refeicao }}</h2>
+                <strong>{{ item.horario }}</strong>
+                <p>{{ item.observacao }}</p>
+            </article>
+        {% endfor %}
+    </section>
+</main>
+{% endblock %}

@@ -34,6 +34,27 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     }
 
+    const mealTabs = document.querySelectorAll('[data-meal-tab]');
+    const mealPanels = document.querySelectorAll('[data-meal-panel]');
+
+    mealTabs.forEach(function (tab) {
+        tab.addEventListener('click', function () {
+            const selectedMeal = tab.dataset.mealTab;
+
+            mealTabs.forEach(function (item) {
+                const isActive = item.dataset.mealTab === selectedMeal;
+                item.classList.toggle('active', isActive);
+                item.setAttribute('aria-selected', isActive ? 'true' : 'false');
+            });
+
+            mealPanels.forEach(function (panel) {
+                const isActive = panel.dataset.mealPanel === selectedMeal;
+                panel.classList.toggle('active', isActive);
+                panel.hidden = !isActive;
+            });
+        });
+    });
+
     const animatedItems = document.querySelectorAll('.card, .menu-item, .aviso-box');
 
     if ('IntersectionObserver' in window && animatedItems.length) {

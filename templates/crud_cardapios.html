@@ -10,14 +10,33 @@
 {% block content %}
 <main class="admin-main">
     <h1>Gerenciar Cardápios</h1>
-    <p><a href="{% url 'cardapio_create' %}" class="btn-secondary">Novo cardápio</a></p>
+    <p class="page-subtitle">Crie cardápios semanais, vincule refeições e atualize o que aparece para os alunos.</p>
+
+    <form method="get" class="filters-section">
+        <div class="search-box">
+            <input type="text" name="q" value="{{ termo }}" placeholder="Buscar por cardápio ou refeição...">
+        </div>
+        <button type="submit" class="btn-secondary">Pesquisar</button>
+        <a href="{% url 'cardapio_create' %}" class="btn-secondary">Novo cardápio</a>
+    </form>
 
     <div class="feedbacks-container">
         {% for cardapio in page_obj %}
             <article class="feedback-card">
-                <h3>{{ cardapio.nome }}</h3>
-                <small>{{ cardapio.data_inicio|date:"d/m/Y" }} a {{ cardapio.data_fim|date:"d/m/Y" }}</small>
-                <p>{{ cardapio.refeicoes.count }} refeições vinculadas</p>
+                <div class="feedback-header">
+                    <div>
+                        <h3>{{ cardapio.nome }}</h3>
+                        <small>{{ cardapio.data_inicio|date:"d/m/Y" }} a {{ cardapio.data_fim|date:"d/m/Y" }}</small>
+                    </div>
+                    <span class="feedback-rating">{{ cardapio.refeicoes.count }} refeições</span>
+                </div>
+                <div class="meal-list">
+                    {% for refeicao in cardapio.refeicoes.all %}
+                        <span>{{ refeicao.get_tipo_display }}: {{ refeicao.titulo }}</span>
+                    {% empty %}
+                        <span>Nenhuma refeição vinculada.</span>
+                    {% endfor %}
+                </div>
                 <div class="feedback-footer">
                     <a href="{% url 'cardapio_update' cardapio.id %}">Editar</a>
                     <a href="{% url 'cardapio_delete' cardapio.id %}">Excluir</a>
@@ -27,5 +46,17 @@
             <p class="empty-state">Nenhum cardápio cadastrado.</p>
         {% endfor %}
     </div>
+
+    {% if page_obj.has_other_pages %}
+        <div class="pagination">
+            {% if page_obj.has_previous %}
+                <a href="?page={{ page_obj.previous_page_number }}{% if termo %}&q={{ termo }}{% endif %}">Anterior</a>
+            {% endif %}
+            <span>Página {{ page_obj.number }} de {{ page_obj.paginator.num_pages }}</span>
+            {% if page_obj.has_next %}
+                <a href="?page={{ page_obj.next_page_number }}{% if termo %}&q={{ termo }}{% endif %}">Próxima</a>
+            {% endif %}
+        </div>
+    {% endif %}
 </main>
 {% endblock %}

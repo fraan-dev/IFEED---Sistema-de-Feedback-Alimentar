@@ -59,24 +59,69 @@
     </section>
 
     <section class="cardapio" id="cardapio-semana" aria-labelledby="cardapio-title">
-        <h2 id="cardapio-title">Cardápio da Semana</h2>
+        <h2 id="cardapio-title">Cardápio Semanal</h2>
+        {% if cardapio_atual %}
+            <p class="cardapio-subtitle">Semana de {{ cardapio_atual.data_inicio|date:"d/m/Y" }} a {{ cardapio_atual.data_fim|date:"d/m/Y" }}</p>
+        {% endif %}
 
-        <div class="menu-grid">
-            <article class="menu-item">
-                <h3>Segunda-feira</h3>
-                <p>Arroz integral, feijão, frango grelhado, salada de alface com tomate e suco de laranja.</p>
-            </article>
+        {% if cardapio_semana %}
+            <div class="meal-tabs" role="tablist" aria-label="Tipos de refeição">
+                {% for grupo in cardapio_semana %}
+                    <button
+                        type="button"
+                        class="meal-tab {% if grupo.ativo %}active{% endif %}"
+                        data-meal-tab="{{ grupo.codigo }}"
+                        role="tab"
+                        aria-selected="{% if grupo.ativo %}true{% else %}false{% endif %}"
+                        aria-controls="meal-panel-{{ grupo.codigo }}"
+                    >
+                        {{ grupo.rotulo }}
+                    </button>
+                {% endfor %}
+            </div>
 
-            <article class="menu-item">
-                <h3>Quarta-feira</h3>
-                <p>Macarrão ao molho de tomate, almôndegas ao forno, mix de legumes e água aromatizada.</p>
-            </article>
-
-            <article class="menu-item">
-                <h3>Sexta-feira</h3>
-                <p>Escondidinho de carne seca, salada de couve, pão integral e fruta da estação.</p>
-            </article>
-        </div>
+            {% for grupo in cardapio_semana %}
+                <div
+                    class="meal-panel {% if grupo.ativo %}active{% endif %}"
+                    id="meal-panel-{{ grupo.codigo }}"
+                    data-meal-panel="{{ grupo.codigo }}"
+                    role="tabpanel"
+                    {% if not grupo.ativo %}hidden{% endif %}
+                >
+                    <div class="menu-grid">
+                        {% for dia in grupo.dias %}
+                            <article class="menu-item">
+                                <h3>{{ dia.nome }} <span>{{ dia.data|date:"d/m" }}</span></h3>
+                                {% if dia.refeicao %}
+                                    <h4>{{ dia.refeicao.nome_principal }}</h4>
+                                    {% if dia.refeicao.acompanhamentos %}
+                                        <div class="meal-tags">
+                                            {% for acompanhamento in dia.refeicao.acompanhamentos %}
+                                                <span>{{ acompanhamento }}</span>
+                                            {% endfor %}
+                                        </div>
+                                    {% endif %}
+                                    {% if user.is_authenticated %}
+                                        <a class="menu-rate-link" href="{% url 'avaliar' dia.refeicao.id %}">Avaliar refeição</a>
+                                    {% else %}
+                                        <a class="menu-rate-link" href="{% url 'login' %}">Avaliar refeição</a>
+                                    {% endif %}
+                                {% else %}
+                                    <p class="empty-meal">Sem refeição cadastrada.</p>
+                                {% endif %}
+                            </article>
+                        {% endfor %}
+                    </div>
+                </div>
+            {% endfor %}
+        {% else %}
+            <div class="menu-grid">
+                <article class="menu-item empty-week">
+                    <h3>Cardápio em atualização</h3>
+                    <p>Assim que a equipe cadastrar as refeições da semana, elas aparecerão aqui.</p>
+                </article>
+            </div>
+        {% endif %}
     </section>
 
     <section class="avisos" id="avisos">
@@ -91,9 +136,11 @@
             <div class="aviso-box">
                 <h3>Horário do Refeitório</h3>
                 <p>
-                    O funcionamento do almoço ocorre das 11h30 às 13h. <br>
-                    O jantar é servido das 17h40 às 18h40.
+                    Lanche da manhã: 08h40 às 09h. <br>
+                    Almoço: 11h30 às 13h. <br>
+                    Jantar: 17h40 às 18h30.
                 </p>
+                <a class="menu-rate-link" href="{% url 'horarios' %}">Ver todos os horários</a>
             </div>
 
             <div class="aviso-box">

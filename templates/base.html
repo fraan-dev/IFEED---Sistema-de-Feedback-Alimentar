@@ -46,15 +46,21 @@
                         </a>
                     </li>
                     <li class="nav-item">
+                        <a href="{% url 'index' %}#informacoes" class="nav-link">
+                            <i class="fas fa-info-circle"></i>
+                            <span>Informações</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
                         <a href="{% url 'index' %}#cardapio-semana" class="nav-link">
                             <i class="fas fa-utensils"></i>
                             <span>Cardápio</span>
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a href="{% url 'index' %}#informacoes" class="nav-link">
-                            <i class="fas fa-info-circle"></i>
-                            <span>Informações</span>
+                        <a href="{% url 'horarios' %}" class="nav-link {% if request.path == '/horarios/' %}active{% endif %}">
+                            <i class="fas fa-clock"></i>
+                            <span>Horários</span>
                         </a>
                     </li>
                     <li class="nav-item">
@@ -108,8 +114,9 @@
         <div class="mobile-menu" id="mobileMenu">
             <ul class="mobile-nav-list">
                 <li><a href="{% url 'index' %}"><i class="fas fa-home"></i> Início</a></li>
-                <li><a href="{% url 'index' %}#cardapio-semana"><i class="fas fa-utensils"></i> Cardápio</a></li>
                 <li><a href="{% url 'index' %}#informacoes"><i class="fas fa-info-circle"></i> Informações</a></li>
+                <li><a href="{% url 'index' %}#cardapio-semana"><i class="fas fa-utensils"></i> Cardápio</a></li>
+                <li><a href="{% url 'horarios' %}"><i class="fas fa-clock"></i> Horários</a></li>
                 <li><a href="{% url 'index' %}#avisos"><i class="fas fa-bullhorn"></i> Avisos</a></li>
                 {% if not user.is_authenticated %}
                     <li><a href="{% url 'login' %}"><i class="fas fa-sign-in-alt"></i> Entrar</a></li>
@@ -161,8 +168,9 @@
                     <h4>Navegação</h4>
                     <ul>
                         <li><a href="{% url 'index' %}">Início</a></li>
-                        <li><a href="{% url 'index' %}#cardapio-semana">Cardápio</a></li>
                         <li><a href="{% url 'index' %}#informacoes">Informações</a></li>
+                        <li><a href="{% url 'index' %}#cardapio-semana">Cardápio</a></li>
+                        <li><a href="{% url 'horarios' %}">Horários</a></li>
                         <li><a href="{% url 'index' %}#avisos">Avisos</a></li>
                     </ul>
                 </div>
