@@ -1,66 +1,137 @@
 <p align="center">
-  <img src="static/img/logograndesf.png" alt="Capa do Projeto IFEED" width="35%">
+  <img src="static/img/logograndesf.png" alt="Logo do IFEED" width="35%">
 </p>
 
-<h1 align="center"> IFEED - UM SISTEMA WEB PARA FEEDBACK DA ALIMENTAÇÃO ESTUDANTIL</h1>
+<h1 align="center">IFEED - Sistema Web de Feedback Alimentar</h1>
+
+<p align="center">
+  Sistema desenvolvido para avaliação, acompanhamento e gestão da alimentação estudantil.
+</p>
 
 ---
 
-### Sobre o Projeto
-O **IFEED** é um sistema digital focado no gerenciamento e feedback da alimentação escolar do Campus Canguaretama. Ele foi idealizado para aproximar os usuários do refeitório institucional, permitindo que alunos e administradores avaliem as refeições, visualizem cardápios e acompanhem relatórios detalhados sobre a aceitação da merenda. O grande diferencial é transformar opiniões em dados estruturados para melhorar continuamente a qualidade do serviço de alimentação oferecido...
+## Sobre o Projeto
+
+O **IFEED** é um sistema web desenvolvido para apoiar o gerenciamento e a avaliação da alimentação estudantil no ambiente escolar.
+
+A proposta do sistema é aproximar os estudantes da gestão do refeitório, permitindo que os alunos avaliem as refeições servidas e que os administradores acompanhem essas informações por meio de relatórios, gráficos e listagens organizadas.
+
+Com isso, o IFEED transforma opiniões dos alunos em dados estruturados, auxiliando na identificação da aceitação das refeições e em possíveis melhorias no serviço de alimentação.
 
 ---
 
-### Equipe de Desenvolvimento
+## Funcionalidades
 
-| Nome | GitHub |
+### Usuário Aluno
+
+- Cadastro e login no sistema.
+- Acesso ao painel do aluno.
+- Avaliação de refeições com notas de 1 a 5.
+- Envio de comentário opcional sobre a refeição.
+- Visualização das avaliações recentes.
+- Consulta ao cardápio e aos horários.
+
+### Usuário Administrador
+
+- Acesso a relatórios administrativos.
+- Visualização dos feedbacks enviados pelos alunos.
+- Gráficos com distribuição de notas, médias e evolução temporal.
+- CRUD de usuários.
+- CRUD de refeições.
+- CRUD de cardápios.
+- Busca, filtros e paginação nas listagens.
+
+### Páginas Públicas
+
+- Página inicial.
+- Cardápio da semana.
+- Página pública de cardápio.
+- Detalhes individuais de cada refeição.
+- Página de horários.
+- Página de contato.
+
+---
+
+## Tecnologias Utilizadas
+
+| Tecnologia | Uso no Projeto |
 | :--- | :--- |
-| **Francislayne Nobre** | [@fraan-dev](https://github.com/fraan-dev) |
-| **Maria Lara** | | 
-| **Vitória Beniz** | | 
-| **Yuri Souza** | | 
+| **Python** | Linguagem principal do backend. |
+| **Django** | Framework utilizado para rotas, views, models, autenticação e templates. |
+| **SQLite** | Banco de dados utilizado no ambiente local. |
+| **HTML5** | Estrutura das páginas. |
+| **CSS3** | Estilização e responsividade da interface. |
+| **JavaScript** | Interatividade das páginas. |
+| **Chart.js** | Geração dos gráficos dos relatórios administrativos. |
+| **Font Awesome** | Ícones utilizados na interface. |
 
 ---
 
-###  Funcionalidades Principais
-* **Painel do Aluno:** Tela interativa para realizar login, realizar o cadastro e enviar feedbacks diários sobre as refeições.
-* **Painel do Administrador:** Área restrita para análise de relatórios, acompanhamento gráfico de aceitação e gestão do menu.
-* **Sistema de Avaliação:** Interface intuitiva e rápida para classificar os menus servidos.
-* **Design Responsivo:** Adaptado tanto para uso em computadores quanto em dispositivos móveis.
+## Estrutura do Projeto
+
+```text
+IFEED---Sistema-de-Feedback-Alimentar/
+├── core/
+│   ├── models.py
+│   ├── views.py
+│   ├── urls.py
+│   ├── forms.py
+│   ├── admin.py
+│   └── migrations/
+├── ifeed_project/
+│   ├── settings.py
+│   ├── urls.py
+│   ├── asgi.py
+│   └── wsgi.py
+├── templates/
+│   ├── base.html
+│   ├── index.html
+│   ├── login.html
+│   ├── cadastro.html
+│   ├── aluno.html
+│   ├── avaliacao.html
+│   ├── cardapio.html
+│   ├── refeicao_detalhes.html
+│   ├── relatorios.html
+│   ├── feedbacks.html
+│   └── páginas de CRUD
+├── static/
+│   ├── estilos/
+│   ├── scripts/
+│   └── img/
+├── manage.py
+├── requirements.txt
+└── db.sqlite3
+```
 
 ---
 
-###  Tecnologias Utilizadas
-O projeto utiliza um conjunto de tecnologias modernas para a construção da sua interface e funcionamento:
+## Models Principais
 
-*  **HTML5** - Estruturação das páginas e componentes visuais de forma modularizada.
-*  **CSS3** - Estilização personalizada, layouts modernos e responsividade.
-*  **JavaScript** - Comportamentos dinâmicos, validações de formulário e interatividade.
-*  **Python / Django Framework** - Gerenciamento de rotas dinâmicas, renderização de templates e lógica de backend.
+Os models representam as principais tabelas do banco de dados do sistema.
 
----
-
-###  Estrutura de Arquivos Atual
-A arquitetura base do projeto está organizada utilizando o padrão de arquitetura do Django:
-
-* `templates/` - Centralização de todas as páginas HTML modularizadas (`base.html`, `index.html`, `login.html`, `cadastro.html`, etc).
-* `static/estilos/` - Arquivos de estilização visual (`css`).
-* `static/scripts/` - Scripts de comportamento e interatividade (`js`).
-* `static/img/` - Centralização de logotipos, favicons e elementos visuais do sistema.
-* `core/` - Aplicativo responsável pelas regras de negócio, controle de rotas (`urls.py`) e visualizações (`views.py`).
-* `ifeed_project/` - Diretório de configuração global do projeto Django.
+| Model | Função |
+| :--- | :--- |
+| `Usuario` | Usuário personalizado do sistema, com matrícula, nome, e-mail, curso, turma e tipo de usuário. |
+| `Refeicao` | Refeições cadastradas, com título, descrição, tipo, data e status. |
+| `Cardapio` | Agrupa refeições por período, formando o cardápio da semana. |
+| `Avaliacao` | Armazena as notas e comentários enviados pelos alunos. |
 
 ---
 
-### Como Executar o Projeto
+## Como Executar Localmente
 
-Para abrir o sistema localmente, acesse a pasta do projeto pelo terminal e execute os comandos abaixo:
+Antes de executar o projeto, abra o terminal dentro da pasta principal do sistema, ou seja, a pasta onde está o arquivo `manage.py`.
+
+### Executar no Windows
+
+Crie o ambiente virtual:
 
 ```bash
 python -m venv venv
 ```
 
-No Windows, ative o ambiente virtual:
+Ative o ambiente virtual:
 
 ```bash
 venv\Scripts\activate
@@ -84,44 +155,111 @@ Inicie o servidor:
 python manage.py runserver
 ```
 
-Depois, acesse no navegador:
+Acesse no navegador:
 
-```bash
+```text
 http://127.0.0.1:8000/
 ```
 
----
+### Executar no Linux
 
-### Como Acessar as Páginas
-
-| Página | Endereço |
-| :--- | :--- |
-| Página inicial | `http://127.0.0.1:8000/` |
-| Login | `http://127.0.0.1:8000/login/` |
-| Cadastro | `http://127.0.0.1:8000/cadastro/` |
-| Painel do aluno | `http://127.0.0.1:8000/aluno/` |
-| Avaliar refeição | `http://127.0.0.1:8000/avaliacao/` |
-| Cardápio público | `http://127.0.0.1:8000/cardapio/` |
-| Relatórios do administrador | `http://127.0.0.1:8000/relatorios/` |
-| Feedbacks | `http://127.0.0.1:8000/feedbacks/` |
-| CRUD de refeições | `http://127.0.0.1:8000/admin-ifeed/refeicoes/` |
-| CRUD de cardápios | `http://127.0.0.1:8000/admin-ifeed/cardapios/` |
-| CRUD de usuários | `http://127.0.0.1:8000/admin-ifeed/usuarios/` |
-
----
-
-### Acesso de Usuários
-
-O sistema possui dois tipos principais de acesso:
-
-* **Aluno:** pode se cadastrar, fazer login, avaliar refeições e visualizar suas avaliações.
-* **Administrador:** pode acessar relatórios, feedbacks e as telas de gerenciamento do sistema.
-
-Caso utilize o banco de dados de exemplo enviado com o projeto, é possível acessar o painel administrativo com:
+Crie o ambiente virtual:
 
 ```bash
-Matrícula: 20251198060015
-Senha: 123456
+python3 -m venv venv
 ```
 
-Também é possível criar um novo usuário pela página de cadastro e selecionar o tipo de usuário como administrador, caso essa opção esteja habilitada no formulário.
+Ative o ambiente virtual:
+
+```bash
+source venv/bin/activate
+```
+
+Instale as dependências:
+
+```bash
+pip install -r requirements.txt
+```
+
+Execute as migrações do banco de dados:
+
+```bash
+python3 manage.py migrate
+```
+
+Inicie o servidor:
+
+```bash
+python3 manage.py runserver
+```
+
+Acesse no navegador:
+
+```text
+http://127.0.0.1:8000/
+```
+
+Para encerrar o servidor, pressione:
+
+```text
+Ctrl + C
+```
+
+---
+
+## Rotas Principais
+
+| Página | Rota |
+| :--- | :--- |
+| Página inicial | `/` |
+| Login | `/login/` |
+| Cadastro | `/cadastro/` |
+| Painel do aluno | `/aluno/` |
+| Avaliação | `/avaliacao/` |
+| Cardápio público | `/cardapio/` |
+| Detalhes da refeição | `/refeicoes/<id>/` |
+| Horários | `/horarios/` |
+| Relatórios | `/relatorios/` |
+| Feedbacks | `/feedbacks/` |
+| CRUD de refeições | `/admin-ifeed/refeicoes/` |
+| CRUD de cardápios | `/admin-ifeed/cardapios/` |
+| CRUD de usuários | `/admin-ifeed/usuarios/` |
+
+---
+
+## Acesso de Teste
+
+Caso esteja usando o banco de dados de exemplo, é possível acessar com:
+
+| Tipo | Informação |
+| :--- | :--- |
+| Matrícula | `20251198060015` |
+| Senha | `123456` |
+| Perfil | Administrador |
+
+---
+## Status do Projeto
+
+O projeto está funcional e contempla os principais requisitos solicitados:
+
+- Navegação entre telas.
+- Banco de dados.
+- Autenticação de usuários.
+- Permissão de acesso por tipo de usuário.
+- CRUD de usuários.
+- CRUD de refeições.
+- CRUD de cardápios.
+- Página pública de cardápio.
+- Página de detalhes individuais de refeição.
+- Sistema de busca e filtro.
+- Paginação.
+- Avaliações salvas no banco de dados.
+- Relatórios administrativos com gráficos.
+
+---
+
+## Considerações Finais
+
+O IFEED foi desenvolvido com o objetivo de melhorar a comunicação entre os estudantes e a gestão da alimentação escolar.
+
+Através das avaliações, o sistema permite acompanhar a satisfação dos alunos e gerar informações úteis para a melhoria contínua das refeições oferecidas.
