@@ -19,8 +19,17 @@ A proposta do sistema é aproximar os estudantes da gestão do refeitório, perm
 Com isso, o IFEED transforma opiniões dos alunos em dados estruturados, auxiliando na identificação da aceitação das refeições e em possíveis melhorias no serviço de alimentação.
 
 ---
+## Desenvolvedores
+
+| Nome | GitHub |
+| :--- | :--- |
+| Francislayne Nobre | [@fraan-dev](https://github.com/fraan-dev) |
+| Maria Lara | [@larasantana-22](https://github.com/larasantana-22) |
+| Vitoria Beniz | [@vbeenizv](https://github.com/vbeenizv) |
+| Yuri Souza | [@yuuricode](https://github.com/yuuricode) |
 
 ## Funcionalidades
+---
 
 ### Usuário Aluno
 
